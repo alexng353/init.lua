@@ -1,8 +1,8 @@
 vim.g.mapleader = " "
 
 require("alexng353")
---local treesitter = require "plugins/treesitter"
---local leap = require "plugins/leap"
+local treesitter = require "plugins/treesitter"
+local leap = require "plugins/leap"
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -42,8 +42,8 @@ require("lazy").setup({
   { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
   "nvim-lua/plenary.nvim",
   "ThePrimeagen/harpoon",
-  -- leap,
-  -- treesitter,
+  leap,
+  treesitter,
 }, {
   root = vim.fn.stdpath("data") .. "/lazy-alex",
   lockfile = vim.fn.stdpath("config") .. "/lazy-alex-lock.json", -- lockfile generated after running update.
@@ -55,14 +55,10 @@ vim.cmd('autocmd VimEnter * silent! source ~/.nvimrc')
 vim.cmd('autocmd VimEnter * silent! set colorcolumn=80')
 vim.cmd('autocmd VimEnter * silent! hi ColorColumn ctermbg=#242424 guibg=#242424')
 
-
 vim.api.nvim_set_option("clipboard","unnamed")
-
 
 vim.wo.number = true
 vim.wo.relativenumber = true
 
-vim.cmd.colorscheme "catppuccin-macchiato"
 
--- Harpoon stuff
--- sk("n", "", "", { noremap = true, silent = true })
+vim.cmd.colorscheme "catppuccin-macchiato"

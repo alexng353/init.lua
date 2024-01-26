@@ -28,3 +28,8 @@ vim.keymap.set("n", "<leader><leader>", function()
   print("reloaded current file")
 end)
 
+-- LSP
+vim.keymap.set("n", "<leader>lf", function()
+  vim.lsp.buf.format()
+  print("formatted buffer")
+end)

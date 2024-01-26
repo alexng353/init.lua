@@ -42,13 +42,88 @@ require("lazy").setup({
   { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
   "nvim-lua/plenary.nvim",
   "ThePrimeagen/harpoon",
+  { 
+    "KadoBOT/nvim-spotify", 
+    opts = {
+      status = {
+        update_interval = 10000,
+        format = '%s %t by %a'
+      },
+    },
+    build = "make"
+  },
+  {
+    "andweeb/presence.nvim",
+    lazy = false,
+  },
+  {
+    "wakatime/vim-wakatime",
+    event = "User AstroFile",
+  },
+  {
+    "zbirenbaum/copilot.lua",
+    enabled = false,
+    cmd = "Copilot",
+    build = ":Copilot auth",
+    event = "InsertEnter",
+    opts = {
+      panel = {
+        enabled = true,
+        auto_refresh = true,
+        keymap = {
+          jump_prev = "[[",
+          jump_next = "]]",
+          accept = "<CR>",
+          refresh = "gr",
+          open = "<M-CR>",
+        },
+        layout = {
+          position = "right", -- bottom | top | left | right
+          ratio = 0.3,
+        },
+      },
+      suggestion = {
+        enabled = true,
+        auto_trigger = true,
+        debounce = 75,
+        keymap = {
+          accept = "<M-l>",
+          accept_word = false,
+          accept_line = false,
+          next = "<M-]>",
+          prev = "<M-[>",
+          dismiss = "<C-]>",
+        },
+      },
+      copilot_node_command = "node", -- Node.js version must be > 18.x
+      server_opts_overrides = {},
+    },
+  },
+  { 
+    "williamboman/mason.nvim",
+    cmd = {
+      "Mason",
+      "MasonInstall",
+      "MasonUninstall",
+      "MasonUninstallAll",
+      "MasonLog",
+    },
+    opts = {
+      ui = {
+        icons = {
+          package_installed = "✓",
+          package_uninstalled = "✗",
+          package_pending = "⟳",
+        },
+      },
+    },
+  },
   leap,
   treesitter,
 }, {
   root = vim.fn.stdpath("data") .. "/lazy-alex",
   lockfile = vim.fn.stdpath("config") .. "/lazy-alex-lock.json", -- lockfile generated after running update.
 })
-
 
 -- Load custom vimscript user config
 vim.cmd('autocmd VimEnter * silent! source ~/.nvimrc')
@@ -59,6 +134,5 @@ vim.api.nvim_set_option("clipboard","unnamed")
 
 vim.wo.number = true
 vim.wo.relativenumber = true
-
 
 vim.cmd.colorscheme "catppuccin-macchiato"

@@ -16,13 +16,15 @@ vim.keymap.set("n", "N", "Nzzzv")
 
 vim.keymap.set("i", "<C-c>", "<Esc>")
 
--- Harpoon Keymaps
-
+-- Terminal
 vim.keymap.set("t", "<Esc><C-n>", "<C-\\><C-n>", { noremap = true, silent = true })
 
-vim.keymap.set('v', '<Tab>', ':normal I<Tab><CR>', { noremap = true })
+-- Select a whole block and indent it
+vim.keymap.set('v', '<Tab>', ':normal I<Tab><Cr>', { noremap = true })
 
+-- Dev
 vim.keymap.set("n", "<leader><leader>", function()
-    vim.cmd("so")
+  vim.cmd("so")
+  print("reloaded current file")
 end)
 

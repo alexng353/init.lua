@@ -21,10 +21,8 @@ function getOS()
 end
 
 local osname = getOS()
-vim.keymap.set("n", "<leader>os", function() print(osname) end)
 if (osname == "Linux")
 then
-  vim.keymap.set("n", "<leader>ss", function() print("god damn") end)
   vim.keymap.set("n", "<M-j>", function() ui.nav_file(1) end)
   vim.keymap.set("n", "<M-k>", function() ui.nav_file(2) end)
   vim.keymap.set("n", "<M-l>", function() ui.nav_file(3) end)

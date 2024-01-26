@@ -31,8 +31,8 @@ require("lazy").setup({
       -- refer to the configuration section below
     }
   },
-  { 
-    'nvim-telescope/telescope.nvim', 
+  {
+    'nvim-telescope/telescope.nvim',
     tag = '0.1.5',
     dependencies = { 'nvim-lua/plenary.nvim' },
   },
@@ -42,8 +42,8 @@ require("lazy").setup({
   { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
   "nvim-lua/plenary.nvim",
   "ThePrimeagen/harpoon",
-  { 
-    "KadoBOT/nvim-spotify", 
+  {
+    "KadoBOT/nvim-spotify",
     opts = {
       status = {
         update_interval = 10000,
@@ -99,25 +99,13 @@ require("lazy").setup({
       server_opts_overrides = {},
     },
   },
-  { 
-    "williamboman/mason.nvim",
-    cmd = {
-      "Mason",
-      "MasonInstall",
-      "MasonUninstall",
-      "MasonUninstallAll",
-      "MasonLog",
-    },
-    opts = {
-      ui = {
-        icons = {
-          package_installed = "✓",
-          package_uninstalled = "✗",
-          package_pending = "⟳",
-        },
-      },
-    },
-  },
+  {'williamboman/mason.nvim'},
+  {'williamboman/mason-lspconfig.nvim'},
+  {'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'},
+  {'neovim/nvim-lspconfig'},
+  {'hrsh7th/cmp-nvim-lsp'},
+  {'hrsh7th/nvim-cmp'},
+  {'L3MON4D3/LuaSnip'},
   leap,
   treesitter,
 }, {

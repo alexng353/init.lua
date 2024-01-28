@@ -29,9 +29,20 @@ vim.keymap.set("n", "<leader><leader>", function()
   print("reloaded current file")
 end)
 
--- LSP
-vim.keymap.set("n", "<leader>lf", function()
-  vim.lsp.buf.format()
-  print("formatted buffer")
-end)
+-- Buffer
+vim.keymap.set('n', "[b", ":bprevious<CR>", { noremap = true })
+vim.keymap.set('n', "]b", ":bnext<CR>", { noremap = true })
+vim.keymap.set('n', "<leader>bc", function() vim.api.nvim_buf_delete(0, {}) end, { noremap = true })
+vim.keymap.set('n', "<leader>bC", function() vim.api.nvim_buf_delete(0, { force = true }) end, { noremap = true })
 
+-- Highlight yanked text
+local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
+vim.api.nvim_create_autocmd('TextYankPost', {
+  callback = function()
+    vim.highlight.on_yank({
+      timeout = 50
+    })
+  end,
+  group = highlight_group,
+  pattern = '*',
+})

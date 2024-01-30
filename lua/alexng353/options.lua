@@ -17,8 +17,20 @@ vim.o.softtabstop = 2
 vim.o.shiftwidth = 2
 vim.o.mouse = ''
 
+vim.opt.fillchars = {
+  fold = " ",
+  foldopen = "",
+  foldclose = "",
+  foldsep = " ",
+  diff = "╱",
+  eob = " ",
+}
+
 -- UFO stuff
-vim.o.foldcolumn = '1'
+vim.o.foldcolumn = "1"
 vim.o.foldlevel = 99
 vim.o.foldlevelstart = 99
 vim.o.foldenable = true
+
+vim.opts.termguicolors = true
+vim.opts.shell = "/bin/zsh"

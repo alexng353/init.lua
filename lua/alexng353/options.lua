@@ -32,5 +32,5 @@ vim.o.foldlevel = 99
 vim.o.foldlevelstart = 99
 vim.o.foldenable = true
 
-vim.opts.termguicolors = true
-vim.opts.shell = "/bin/zsh"
+vim.opt.termguicolors = true
+vim.opt.shell = "/bin/zsh"

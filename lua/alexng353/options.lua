@@ -22,11 +22,3 @@ vim.o.foldcolumn = '1'
 vim.o.foldlevel = 99
 vim.o.foldlevelstart = 99
 vim.o.foldenable = true
-
-
--- Line Number Highlighting
-vim.cmd('highlight LineNr guifg=#FFD700')
-vim.cmd('highlight CursorLineNr guifg=#00FFFF')
-
-vim.o.cursorlineopt = "number"
-vim.o.cursorline = true

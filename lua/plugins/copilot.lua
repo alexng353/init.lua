@@ -1,3 +1,6 @@
+local os = require("alexng353.helpers").getOS()
+local accept = os == "Linux" and "<M-CR>" or "<D-l>"
+local open = os == "Linux" and "<M-CR>" or "<D-CR>"
 return {
   "zbirenbaum/copilot.lua",
   enabled = true,
@@ -13,10 +16,10 @@ return {
         jump_next = "]]",
         accept = "<CR>",
         refresh = "gr",
-        open = "<M-CR>",
+        open = open,
       },
       layout = {
-        position = "right",   -- bottom | top | left | right
+        position = "right", -- bottom | top | left | right
         ratio = 0.3,
       },
     },
@@ -25,7 +28,7 @@ return {
       auto_trigger = true,
       debounce = 75,
       keymap = {
-        accept = "<M-l>",
+        accept = accept,
         accept_word = false,
         accept_line = false,
         next = "<M-]>",
@@ -33,7 +36,7 @@ return {
         dismiss = "<C-]>",
       },
     },
-    copilot_node_command = "node",   -- Node.js version must be > 18.x
+    copilot_node_command = "node", -- Node.js version must be > 18.x
     server_opts_overrides = {},
   },
 }

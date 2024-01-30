@@ -9,3 +9,9 @@ require("lazy").setup("plugins", {
 
 vim.cmd.colorscheme "catppuccin-macchiato"
 
+-- Line Number Highlighting
+vim.o.cursorlineopt = "number"
+vim.o.cursorline = true
+
+vim.cmd('highlight LineNr guifg=#FFD700')
+vim.cmd('highlight CursorLineNr guifg=#00FFFF')

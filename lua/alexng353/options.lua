@@ -34,3 +34,5 @@ vim.o.foldenable = true
 
 vim.opt.termguicolors = true
 vim.opt.shell = "/bin/zsh"
+
+vim.o.wrap = false

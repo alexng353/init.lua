@@ -37,13 +37,10 @@ require('mason-lspconfig').setup({
     lsp_zero.default_setup,
     tsserver = function()
       require('lspconfig').tsserver.setup({
-        settings = {
-          typescript = {
-            format = {
-              enable = false,
-            }
-          }
-        }
+        on_attach = function(client)
+          client.server_capabilities.documentFormattingProvider = false
+          client.server_capabilities.documentRangeFormattingProvider = false
+        end
       })
     end,
     lua_ls = function()

@@ -1,5 +1,5 @@
 local os = require("alexng353.helpers").getOS()
-local accept = os == "Linux" and "<M-l>" or "<D-l>"
+local accept = os == "Linux" and "<M-;>" or "<D-;>"
 local open = os == "Linux" and "<M-CR>" or "<D-CR>"
 return {
   "zbirenbaum/copilot.lua",

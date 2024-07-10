@@ -27,5 +27,5 @@ require("lazy").setup({
   -- automatically check for plugin updates
   checker = { enabled = true },
   root = vim.fn.stdpath("data") .. "/lazy",
-  lockfile = vim.fn.stdpath("config") .. "/lazy-lock.1.json", -- lockfile generated after running update.
+  lockfile = vim.fn.stdpath("config") .. "/lazy-lock.json", -- lockfile generated after running update.
 })

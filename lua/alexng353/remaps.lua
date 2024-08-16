@@ -20,7 +20,8 @@ vim.keymap.set("t", "<Esc><C-N>", "<C-\\><C-n>", { noremap = true, silent = true
 vim.keymap.set("t", "<C-space>", "<C-\\><C-n>", { noremap = true, silent = true })
 
 -- Select a whole block and indent it
-vim.keymap.set('v', '<Tab>', ':normal I<Tab><Cr>', { noremap = true })
+vim.keymap.set('v', '<Tab>', '>gv', { noremap = true })
+vim.keymap.set('v', '<S-Tab>', '<gv', { noremap = true })
 
 -- Dev
 vim.keymap.set("n", "<leader><leader>", function()
@@ -84,3 +85,4 @@ vim.api.nvim_set_keymap('v', '<leader>[', ':lua SurroundSelection("[", "]")<CR>'
 vim.api.nvim_set_keymap('v', '<leader>\'', ':lua SurroundSelection("\'", "\'")<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('v', '<leader>"', ':lua SurroundSelection("\\\"", "\\\"")<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('v', '<leader>(', ':lua SurroundSelection("(", ")")<CR>', { noremap = true, silent = true })
+

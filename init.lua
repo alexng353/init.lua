@@ -11,6 +11,8 @@ require("alexng353")
 -- })
 
 vim.cmd.colorscheme "catppuccin-macchiato"
+-- make the background transparent
+-- vim.cmd('highlight Normal guibg=NONE ctermbg=NONE')
 
 -- Line Number Highlighting
 vim.o.cursorlineopt = "number"

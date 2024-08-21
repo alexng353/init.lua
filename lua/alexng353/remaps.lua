@@ -56,7 +56,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 -- Function to surround visual selection with brackets or quotes
-SurroundSelection = function (start_char, end_char)
+SurroundSelection = function(start_char, end_char)
   -- Get the current visual selection
   local start_pos = vim.fn.getpos("'<")
   local end_pos = vim.fn.getpos("'>")
@@ -66,7 +66,8 @@ SurroundSelection = function (start_char, end_char)
 
   -- If the selection is on a single line, adjust the start and end columns
   if #lines == 1 then
-    lines[1] = lines[1]:sub(1, start_pos[3] - 1) .. start_char .. lines[1]:sub(start_pos[3], end_pos[3]) .. end_char .. lines[1]:sub(end_pos[3] + 1)
+    lines[1] = lines[1]:sub(1, start_pos[3] - 1) ..
+    start_char .. lines[1]:sub(start_pos[3], end_pos[3]) .. end_char .. lines[1]:sub(end_pos[3] + 1)
   else
     -- For multi-line selection, add start_char and end_char to the first and last lines
     lines[1] = lines[1]:sub(1, start_pos[3] - 1) .. start_char .. lines[1]:sub(start_pos[3])
@@ -86,3 +87,10 @@ vim.api.nvim_set_keymap('v', '<leader>\'', ':lua SurroundSelection("\'", "\'")<C
 vim.api.nvim_set_keymap('v', '<leader>"', ':lua SurroundSelection("\\\"", "\\\"")<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('v', '<leader>(', ':lua SurroundSelection("(", ")")<CR>', { noremap = true, silent = true })
 
+
+-- Insert lorem ipsum
+local lipsum =
+"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+vim.keymap.set('n', "<leader>il", function()
+  vim.api.nvim_put({ lipsum }, "c", true, true)
+end, { noremap = true, silent = true })

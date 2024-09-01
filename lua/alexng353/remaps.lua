@@ -32,7 +32,20 @@ end)
 -- Buffer
 vim.keymap.set('n', "[b", ":bprevious<CR>", { noremap = true })
 vim.keymap.set('n', "]b", ":bnext<CR>", { noremap = true })
-vim.keymap.set('n', "<leader>bc", function() vim.api.nvim_buf_delete(0, {}) end, { noremap = true })
+vim.keymap.set('n', "<leader>bc", function()
+  local current_buf = vim.api.nvim_get_current_buf()
+  local next_buf = vim.fn.bufnr('#')
+
+  -- If there's no alternate buffer, create a new empty one
+  if next_buf == -1 then
+    vim.cmd('enew')
+  else
+    vim.cmd('buffer ' .. next_buf)
+  end
+
+  -- Now delete the original buffer
+  vim.api.nvim_buf_delete(current_buf, {})
+end, { noremap = true, silent = true })
 vim.keymap.set('n', "<leader>bC", function() vim.api.nvim_buf_delete(0, { force = true }) end, { noremap = true })
 
 

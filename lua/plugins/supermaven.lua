@@ -1,3 +1,10 @@
+local pwd = vim.fn.getcwd()
+
+if string.match(pwd, "cmpt125") then
+  print("Supermaven disabled")
+  return {}
+end
+
 local os = require("alexng353.helpers").getOS()
 
 local accept = os == "Linux" and "<M-;>" or "<D-;>"

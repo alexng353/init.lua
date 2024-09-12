@@ -26,21 +26,14 @@ local parse = require("luasnip.util.parser").parse_snippet
 local ms = ls.multi_snippet
 local k = require("luasnip.nodes.key_indexer").new_key
 
-ls.add_snippets("all", {
-  s("ternary", {
-    -- equivalent to "${1:cond} ? ${2:then} : ${3:else}"
-    i(1, "cond"), t(" ? "), i(2, "then"), t(" : "), i(3, "else")
-  })
-})
-
 -- sk -> \$$0\$
 ls.add_snippets("tex", {
-  s("sk", {
-    t("$"), i(1, "input"), t("$")
-  }),
-  s("nn", {
-    t("$$"), i(1, "input"), t("$$")
-  }),
+  -- s("sk", {
+  --   t("$"), i(1, "input"), t("$")
+  -- }),
+  -- s("nn", {
+  --   t("$$"), i(1, "input"), t("$$")
+  -- }),
   s("neg", {
     t("\\neg "), i(1, "input")
   }),
@@ -52,6 +45,12 @@ ls.add_snippets("tex", {
   }),
   s("lor", {
     t("\\lor "), i(1, "input")
+  }),
+  s("RR", {
+    t("\\mathbb{R} "), i(1, "input")
+  }),
+  s("Rn", {
+    t("\\mathbb{R}^n "), i(1, "input")
   }),
 })
 

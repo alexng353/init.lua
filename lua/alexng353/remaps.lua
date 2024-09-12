@@ -162,7 +162,6 @@ vim.api.nvim_create_autocmd("TextChangedI", {
 -- local luasnip = require("luasnip")
 -- vim.keymap.set('i', "<Tab>",
 --   function()
---     print("tab")
 --     if luasnip.expand_or_jumpable() then
 --       luasnip.expand_or_jump()
 --     end

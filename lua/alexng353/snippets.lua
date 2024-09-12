@@ -38,25 +38,21 @@ ls.add_snippets("tex", {
   s("sk", {
     t("$"), i(1, "input"), t("$")
   }),
-  s({ trig = "eq", dscr = "A LaTeX equation environment" },
-    fmta(
-      [[
-      \\begin{<1>}
-      <2>
-      \\end{<1>}
-
-      ]],
-      {
-        i(1, "env"),
-        d(2, function(_, snip)
-          return sn(nil, snip.env.i(1))
-        end)
-      },
-      {
-        delimiters = "<>"
-      }
-    )
-  ),
+  s("nn", {
+    t("$$"), i(1, "input"), t("$$")
+  }),
+  s("neg", {
+    t("\\neg "), i(1, "input")
+  }),
+  s("frac", {
+    t("\\frac{"), i(1, "num"), t("}{"), i(2, "den"), t("}")
+  }),
+  s("land", {
+    t("\\land "), i(1, "input")
+  }),
+  s("lor", {
+    t("\\lor "), i(1, "input")
+  }),
 })
 
 -- Autocommand to insert "\\" when pressing Enter inside a pmatrix
@@ -82,7 +78,7 @@ ls.add_snippets("tex", {
 --
 --     -- Map the Enter key to insert "\\" if inside a pmatrix
 --     vim.api.nvim_buf_set_keymap(0, "i", "<CR>", "v:lua.require'myplugin'.check_pmatrix() ? '\\\\<CR>' : '<CR>'", { expr = true, noremap = true, silent = true })
---     
+--
 --     -- Define the check_pmatrix function globally
 --     _G.myplugin = {}
 --     _G.myplugin.check_pmatrix = function()

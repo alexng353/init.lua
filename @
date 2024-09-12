@@ -1,0 +1,336 @@
+latex
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Your branch is up to date with 'origin/main'.
+#
+# Changes to be committed:
+#	modified:   after/plugin/lsp.lua
+#	modified:   lua/alexng353/init.lua
+#	modified:   lua/alexng353/remaps.lua
+#	new file:   lua/alexng353/snippets.lua
+#	new file:   lua/plugins/luasnip-latex-snippets.lua
+#	new file:   lua/plugins/luasnip.lua
+#	new file:   lua/plugins/vimtex.lua
+#
+# ------------------------ >8 ------------------------
+# Do not modify or remove the line above.
+# Everything below it will be ignored.
+diff --git a/after/plugin/lsp.lua b/after/plugin/lsp.lua
+index 12c461d..7bd4a31 100644
+--- a/after/plugin/lsp.lua
++++ b/after/plugin/lsp.lua
+@@ -32,17 +32,20 @@ end)
+ -- here you can setup the language servers
+ require('mason').setup({})
+ require('mason-lspconfig').setup({
+-  ensure_installed = { 'tsserver', 'rust_analyzer' },
++  ensure_installed = {
++    -- 'tsserver',
++    'rust_analyzer'
++  },
+   handlers = {
+     lsp_zero.default_setup,
+-    tsserver = function()
+-      require('lspconfig').tsserver.setup({
+-        on_attach = function(client)
+-          client.server_capabilities.documentFormattingProvider = false
+-          client.server_capabilities.documentRangeFormattingProvider = false
+-        end
+-      })
+-    end,
++    -- tsserver = function()
++    --   require('lspconfig').tsserver.setup({
++    --     on_attach = function(client)
++    --       client.server_capabilities.documentFormattingProvider = false
++    --       client.server_capabilities.documentRangeFormattingProvider = false
++    --     end
++    --   })
++    -- end,
+     lua_ls = function()
+       require('lspconfig').lua_ls.setup({
+         settings = {
+@@ -62,16 +65,50 @@ require('mason-lspconfig').setup({
+ 
+ local cmp = require('cmp')
+ local cmp_action = require('lsp-zero').cmp_action()
++local luasnip = require('luasnip')
++
++-- Set up nvim-cmp
+ cmp.setup({
+-  -- sources = {
+-  --   { name = "supermaven" },
+-  -- },
++  snippet = {
++    -- REQUIRED: This tells nvim-cmp how to expand snippets
++    expand = function(args)
++      luasnip.lsp_expand(args.body) -- For `luasnip` users
++    end,
++  },
+   mapping = cmp.mapping.preset.insert({
+-    ['<Tab>'] = cmp_action.tab_complete(),
+-    ['<S-Tab>'] = cmp_action.select_prev_or_fallback(),
++    ['<Tab>'] = cmp.mapping(function(fallback)
++      if cmp.visible() then
++        cmp.select_next_item()
++      elseif luasnip.expand_or_jumpable() then
++        luasnip.expand_or_jump()
++      else
++        fallback()
++      end
++    end, { 'i', 's' }),
++
++    ['<S-Tab>'] = cmp.mapping(function(fallback)
++      if cmp.visible() then
++        cmp.select_prev_item()
++      elseif luasnip.jumpable(-1) then
++        luasnip.jump(-1)
++      else
++        fallback()
++      end
++    end, { 'i', 's' }),
++
+     ['<CR>'] = cmp.mapping.confirm({
+       behavior = cmp.ConfirmBehavior.Replace,
+       select = true,
+     }),
+-  })
++  }),
++  -- You can add your other sources here, such as 'supermaven'
++  sources = cmp.config.sources({
++    { name = 'luasnip' },  -- LuaSnip integration
++    { name = 'nvim_lsp' }, -- LSP source
++    -- Add other sources as necessary
++    -- { name = 'supermaven' },
++  }),
+ })
++
++-- Load LuaSnip snippets
++-- require("luasnip.loaders.from_vscode").lazy_load() -- Load snippets from VSCode-style snippets
+diff --git a/lua/alexng353/init.lua b/lua/alexng353/init.lua
+index 8008209..c15402c 100644
+--- a/lua/alexng353/init.lua
++++ b/lua/alexng353/init.lua
+@@ -2,3 +2,4 @@ require("alexng353.remaps")
+ require("alexng353.conlog")
+ require("alexng353.options")
+ require("alexng353.helpers")
++require("alexng353.snippets")
+diff --git a/lua/alexng353/remaps.lua b/lua/alexng353/remaps.lua
+index baaeb35..2371747 100644
+--- a/lua/alexng353/remaps.lua
++++ b/lua/alexng353/remaps.lua
+@@ -107,3 +107,65 @@ local lipsum =
+ vim.keymap.set('n', "<leader>il", function()
+   vim.api.nvim_put({ lipsum }, "c", true, true)
+ end, { noremap = true, silent = true })
++
++
++-- snippets
++
++local ls = require("luasnip")
++
++vim.keymap.set({"i"}, "<D-[>", function()
++  ls.expand()
++  print("expanded")
++end, {silent = true})
++vim.keymap.set({"i", "s"}, "<C-L>", function() ls.jump( 1) end, {silent = true})
++vim.keymap.set({"i", "s"}, "<C-J>", function() ls.jump(-1) end, {silent = true})
++
++vim.keymap.set({"i", "s"}, "<C-E>", function()
++	if ls.choice_active() then
++		ls.change_choice(1)
++	end
++end, {silent = true})
++
++-- vim.cmd([[
++--   autocmd InsertCharPre * lua AutoExpandSnippet()
++-- ]])
++--
++-- vim.api.nvim_create_autocmd("", {
++--
++-- function AutoExpandSnippet()
++--   print("expanding")
++--   local luasnip = require('luasnip')
++--   local line = vim.api.nvim_get_current_line()
++--   local col = vim.fn.col('.') - 1
++--
++--   -- Check if 'sk' is at the cursor position
++--   if string.sub(line, col - 1, col) == "sk" then
++--     -- Expand the snippet
++--     luasnip.expand()
++--   end
++-- end
++
++-- Autocommand to auto-expand snippets when a match is found
++vim.api.nvim_create_autocmd("TextChangedI", {
++  pattern = "*", -- Apply to all filetypes, you can change this to specific filetypes
++  callback = function()
++    local luasnip = require("luasnip")
++    -- if luasnip.expand_or_jumpable() then
++    --   luasnip.expand_or_jump() -- Automatically expand the snippet
++    -- end
++    if luasnip.expandable() then
++      luasnip.expand()
++    end
++  end,
++})
++
++-- local luasnip = require("luasnip")
++-- vim.keymap.set('i', "<Tab>",
++--   function()
++--     print("tab")
++--     if luasnip.expand_or_jumpable() then
++--       luasnip.expand_or_jump()
++--     end
++--   end,
++-- { silent = true }
++-- )
+diff --git a/lua/alexng353/snippets.lua b/lua/alexng353/snippets.lua
+new file mode 100644
+index 0000000..ea0ed4a
+--- /dev/null
++++ b/lua/alexng353/snippets.lua
+@@ -0,0 +1,92 @@
++local ls = require("luasnip")
++local s = ls.snippet
++local sn = ls.snippet_node
++local isn = ls.indent_snippet_node
++local t = ls.text_node
++local i = ls.insert_node
++local f = ls.function_node
++local c = ls.choice_node
++local d = ls.dynamic_node
++local r = ls.restore_node
++local events = require("luasnip.util.events")
++local ai = require("luasnip.nodes.absolute_indexer")
++local extras = require("luasnip.extras")
++local l = extras.lambda
++local rep = extras.rep
++local p = extras.partial
++local m = extras.match
++local n = extras.nonempty
++local dl = extras.dynamic_lambda
++local fmt = require("luasnip.extras.fmt").fmt
++local fmta = require("luasnip.extras.fmt").fmta
++local conds = require("luasnip.extras.expand_conditions")
++local postfix = require("luasnip.extras.postfix").postfix
++local types = require("luasnip.util.types")
++local parse = require("luasnip.util.parser").parse_snippet
++local ms = ls.multi_snippet
++local k = require("luasnip.nodes.key_indexer").new_key
++
++ls.add_snippets("all", {
++  s("ternary", {
++    -- equivalent to "${1:cond} ? ${2:then} : ${3:else}"
++    i(1, "cond"), t(" ? "), i(2, "then"), t(" : "), i(3, "else")
++  })
++})
++
++-- sk -> \$$0\$
++ls.add_snippets("tex", {
++  s("sk", {
++    t("$"), i(1, "input"), t("$")
++  }),
++  s({ trig = "eq", dscr = "A LaTeX equation environment" },
++    fmta(
++      [[
++      \\begin{<1>}
++      <2>
++      \\end{<1>}
++
++      ]],
++      {
++        i(1, "env"),
++        d(2, function(_, snip)
++          return sn(nil, snip.env.i(1))
++        end)
++      },
++      {
++        delimiters = "<>"
++      }
++    )
++  ),
++})
++
++-- Autocommand to insert "\\" when pressing Enter inside a pmatrix
++-- vim.api.nvim_create_autocmd("BufEnter", {
++--   pattern = "*.tex",
++--   callback = function()
++--     -- Function to check if the cursor is inside a pmatrix
++--     local function inside_pmatrix()
++--       local ts_utils = require 'nvim-treesitter.ts_utils'
++--       local node = ts_utils.get_node_at_cursor()
++--
++--       while node do
++--         if node:type() == "environment" then
++--           local env_name = vim.treesitter.query.get_node_text(node:child(1), 0)
++--           if env_name == "pmatrix" then
++--             return true
++--           end
++--         end
++--         node = node:parent()
++--       end
++--       return false
++--     end
++--
++--     -- Map the Enter key to insert "\\" if inside a pmatrix
++--     vim.api.nvim_buf_set_keymap(0, "i", "<CR>", "v:lua.require'myplugin'.check_pmatrix() ? '\\\\<CR>' : '<CR>'", { expr = true, noremap = true, silent = true })
++--     
++--     -- Define the check_pmatrix function globally
++--     _G.myplugin = {}
++--     _G.myplugin.check_pmatrix = function()
++--       return inside_pmatrix()
++--     end
++--   end
++-- })
+diff --git a/lua/plugins/luasnip-latex-snippets.lua b/lua/plugins/luasnip-latex-snippets.lua
+new file mode 100644
+index 0000000..1dbafaf
+--- /dev/null
++++ b/lua/plugins/luasnip-latex-snippets.lua
+@@ -0,0 +1,10 @@
++return {
++  "iurimateus/luasnip-latex-snippets.nvim",
++  -- vimtex isn't required if using treesitter
++  requires = { "L3MON4D3/LuaSnip", "lervag/vimtex" },
++  config = function()
++    require 'luasnip-latex-snippets'.setup()
++    -- or setup({ use_treesitter = true })
++    require("luasnip").config.setup { enable_autosnippets = true }
++  end,
++}
+diff --git a/lua/plugins/luasnip.lua b/lua/plugins/luasnip.lua
+new file mode 100644
+index 0000000..4b223c3
+--- /dev/null
++++ b/lua/plugins/luasnip.lua
+@@ -0,0 +1,7 @@
++return {
++	"L3MON4D3/LuaSnip",
++	-- follow latest release.
++	version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
++	-- install jsregexp (optional!).
++	build = "make install_jsregexp",
++}
+diff --git a/lua/plugins/vimtex.lua b/lua/plugins/vimtex.lua
+new file mode 100644
+index 0000000..fbb1299
+--- /dev/null
++++ b/lua/plugins/vimtex.lua
+@@ -0,0 +1,13 @@
++return {
++  "lervag/vimtex",
++  lazy = false,     -- we don't want to lazy load VimTeX
++  -- tag = "v2.15", -- uncomment to pin to a specific release
++  init = function()
++    -- VimTeX configuration goes here, e.g.
++    vim.g.vimtex_view_method = "zathura"
++    vim.g.tex_flavor = "latex"
++    -- set conceallevel=1
++    vim.g.tex_conceal = "abdmg"
++    vim.g.vimtex_quickfix_mode = 0
++  end
++}

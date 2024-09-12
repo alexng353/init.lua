@@ -32,17 +32,20 @@ end)
 -- here you can setup the language servers
 require('mason').setup({})
 require('mason-lspconfig').setup({
-  ensure_installed = { 'tsserver', 'rust_analyzer' },
+  ensure_installed = {
+    -- 'tsserver',
+    'rust_analyzer'
+  },
   handlers = {
     lsp_zero.default_setup,
-    tsserver = function()
-      require('lspconfig').tsserver.setup({
-        on_attach = function(client)
-          client.server_capabilities.documentFormattingProvider = false
-          client.server_capabilities.documentRangeFormattingProvider = false
-        end
-      })
-    end,
+    -- tsserver = function()
+    --   require('lspconfig').tsserver.setup({
+    --     on_attach = function(client)
+    --       client.server_capabilities.documentFormattingProvider = false
+    --       client.server_capabilities.documentRangeFormattingProvider = false
+    --     end
+    --   })
+    -- end,
     lua_ls = function()
       require('lspconfig').lua_ls.setup({
         settings = {
@@ -62,16 +65,50 @@ require('mason-lspconfig').setup({
 
 local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
+local luasnip = require('luasnip')
+
+-- Set up nvim-cmp
 cmp.setup({
-  -- sources = {
-  --   { name = "supermaven" },
-  -- },
+  snippet = {
+    -- REQUIRED: This tells nvim-cmp how to expand snippets
+    expand = function(args)
+      luasnip.lsp_expand(args.body) -- For `luasnip` users
+    end,
+  },
   mapping = cmp.mapping.preset.insert({
-    ['<Tab>'] = cmp_action.tab_complete(),
-    ['<S-Tab>'] = cmp_action.select_prev_or_fallback(),
+    ['<Tab>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      elseif luasnip.expand_or_jumpable() then
+        luasnip.expand_or_jump()
+      else
+        fallback()
+      end
+    end, { 'i', 's' }),
+
+    ['<S-Tab>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item()
+      elseif luasnip.jumpable(-1) then
+        luasnip.jump(-1)
+      else
+        fallback()
+      end
+    end, { 'i', 's' }),
+
     ['<CR>'] = cmp.mapping.confirm({
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     }),
-  })
+  }),
+  -- You can add your other sources here, such as 'supermaven'
+  sources = cmp.config.sources({
+    { name = 'luasnip' },  -- LuaSnip integration
+    { name = 'nvim_lsp' }, -- LSP source
+    -- Add other sources as necessary
+    -- { name = 'supermaven' },
+  }),
 })
+
+-- Load LuaSnip snippets
+-- require("luasnip.loaders.from_vscode").lazy_load() -- Load snippets from VSCode-style snippets

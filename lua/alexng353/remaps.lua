@@ -107,3 +107,65 @@ local lipsum =
 vim.keymap.set('n', "<leader>il", function()
   vim.api.nvim_put({ lipsum }, "c", true, true)
 end, { noremap = true, silent = true })
+
+
+-- snippets
+
+local ls = require("luasnip")
+
+vim.keymap.set({"i"}, "<D-[>", function()
+  ls.expand()
+  print("expanded")
+end, {silent = true})
+vim.keymap.set({"i", "s"}, "<C-L>", function() ls.jump( 1) end, {silent = true})
+vim.keymap.set({"i", "s"}, "<C-J>", function() ls.jump(-1) end, {silent = true})
+
+vim.keymap.set({"i", "s"}, "<C-E>", function()
+	if ls.choice_active() then
+		ls.change_choice(1)
+	end
+end, {silent = true})
+
+-- vim.cmd([[
+--   autocmd InsertCharPre * lua AutoExpandSnippet()
+-- ]])
+--
+-- vim.api.nvim_create_autocmd("", {
+--
+-- function AutoExpandSnippet()
+--   print("expanding")
+--   local luasnip = require('luasnip')
+--   local line = vim.api.nvim_get_current_line()
+--   local col = vim.fn.col('.') - 1
+--
+--   -- Check if 'sk' is at the cursor position
+--   if string.sub(line, col - 1, col) == "sk" then
+--     -- Expand the snippet
+--     luasnip.expand()
+--   end
+-- end
+
+-- Autocommand to auto-expand snippets when a match is found
+vim.api.nvim_create_autocmd("TextChangedI", {
+  pattern = "*", -- Apply to all filetypes, you can change this to specific filetypes
+  callback = function()
+    local luasnip = require("luasnip")
+    -- if luasnip.expand_or_jumpable() then
+    --   luasnip.expand_or_jump() -- Automatically expand the snippet
+    -- end
+    if luasnip.expandable() then
+      luasnip.expand()
+    end
+  end,
+})
+
+-- local luasnip = require("luasnip")
+-- vim.keymap.set('i', "<Tab>",
+--   function()
+--     print("tab")
+--     if luasnip.expand_or_jumpable() then
+--       luasnip.expand_or_jump()
+--     end
+--   end,
+-- { silent = true }
+-- )

@@ -80,7 +80,7 @@ SurroundSelection = function(start_char, end_char)
   -- If the selection is on a single line, adjust the start and end columns
   if #lines == 1 then
     lines[1] = lines[1]:sub(1, start_pos[3] - 1) ..
-    start_char .. lines[1]:sub(start_pos[3], end_pos[3]) .. end_char .. lines[1]:sub(end_pos[3] + 1)
+        start_char .. lines[1]:sub(start_pos[3], end_pos[3]) .. end_char .. lines[1]:sub(end_pos[3] + 1)
   else
     -- For multi-line selection, add start_char and end_char to the first and last lines
     lines[1] = lines[1]:sub(1, start_pos[3] - 1) .. start_char .. lines[1]:sub(start_pos[3])
@@ -113,18 +113,18 @@ end, { noremap = true, silent = true })
 
 local ls = require("luasnip")
 
-vim.keymap.set({"i"}, "<D-[>", function()
+vim.keymap.set({ "i" }, "<D-[>", function()
   ls.expand()
   print("expanded")
-end, {silent = true})
-vim.keymap.set({"i", "s"}, "<C-L>", function() ls.jump( 1) end, {silent = true})
-vim.keymap.set({"i", "s"}, "<C-J>", function() ls.jump(-1) end, {silent = true})
+end, { silent = true })
+vim.keymap.set({ "i", "s" }, "<C-L>", function() ls.jump(1) end, { silent = true })
+vim.keymap.set({ "i", "s" }, "<C-J>", function() ls.jump(-1) end, { silent = true })
 
-vim.keymap.set({"i", "s"}, "<C-E>", function()
-	if ls.choice_active() then
-		ls.change_choice(1)
-	end
-end, {silent = true})
+vim.keymap.set({ "i", "s" }, "<C-E>", function()
+  if ls.choice_active() then
+    ls.change_choice(1)
+  end
+end, { silent = true })
 
 -- vim.cmd([[
 --   autocmd InsertCharPre * lua AutoExpandSnippet()
@@ -145,16 +145,49 @@ end, {silent = true})
 --   end
 -- end
 
+-- function StartNewUndoBlock()
+--   -- Temporarily exit insert mode to start a new undo block
+--   vim.cmd('normal! <C-G>u')
+-- end
+
+local untrigger = function()
+  -- get the snippet
+  local snip = require("luasnip").session.current_nodes[vim.api.nvim_get_current_buf()].parent.snippet
+  -- get its trigger
+  local trig = snip.trigger
+  -- replace that region with the trigger
+  local node_from, node_to = snip.mark:pos_begin_end_raw()
+  vim.api.nvim_buf_set_text(
+    0,
+    node_from[1],
+    node_from[2],
+    node_to[1],
+    node_to[2],
+    { trig }
+  )
+  -- reset the cursor-position to ahead the trigger
+  vim.fn.setpos(".", { 0, node_from[1] + 1, node_from[2] + 1 + string.len(trig) })
+end
+
+
+vim.keymap.set({ "i", "s" }, "<c-x>", function()
+  if require("luasnip").in_snippet() then
+    untrigger()
+    require("luasnip").unlink_current()
+  end
+end, {
+  desc = "Undo a snippet",
+})
+
 -- Autocommand to auto-expand snippets when a match is found
 vim.api.nvim_create_autocmd("TextChangedI", {
   pattern = "*", -- Apply to all filetypes, you can change this to specific filetypes
   callback = function()
     local luasnip = require("luasnip")
-    -- if luasnip.expand_or_jumpable() then
-    --   luasnip.expand_or_jump() -- Automatically expand the snippet
-    -- end
     if luasnip.expandable() then
-      luasnip.expand()
+      -- Start a new undo block in Insert mode (i_CTRL-G_u)
+      -- vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-G>u', true, false, true), 'i', true)
+      luasnip.expand() -- Automatically expand the snippet
     end
   end,
 })

@@ -1,4 +1,5 @@
 local directory = "/home/alex/code/luasnip-latex-snippets";
+local macosDirectory = "/Users/alex/code/luasnip-latex-snippets.nvim";
 
 local function does_file_exist(name)
   local f = io.open(name, "rb")
@@ -6,7 +7,7 @@ local function does_file_exist(name)
   return f ~= nil
 end
 
-if does_file_exist(directory) then
+if does_file_exist(directory) then -- Linux
   return {
     dir = directory,
     -- "alexng353/luasnip-latex-snippets.nvim",
@@ -16,6 +17,13 @@ if does_file_exist(directory) then
     config = function()
       -- require 'luasnip-latex-snippets'.setup()
       -- or setup({ use_treesitter = true })
+      require("luasnip").config.setup { enable_autosnippets = true }
+    end,
+  }
+elseif does_file_exist(macosDirectory) then -- macosDirectory
+  return {
+    dir = macosDirectory,
+    config = function()
       require("luasnip").config.setup { enable_autosnippets = true }
     end,
   }

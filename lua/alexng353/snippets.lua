@@ -26,6 +26,7 @@ local parse = require("luasnip.util.parser").parse_snippet
 local ms = ls.multi_snippet
 local k = require("luasnip.nodes.key_indexer").new_key
 
+
 -- sk -> \$$0\$
 ls.add_snippets("tex", {
   -- s("sk", {
@@ -58,6 +59,12 @@ ls.add_snippets("tex", {
   s("\"", {
     t("\\text{"), i(1, ""), t("} ")
   }),
+  s("@today", {
+    t(os.date("%B %d, %Y")), i(0)
+  }),
+  -- s("@document", {
+  --   t(document_header), i(0)
+  -- }),
 })
 
 -- Autocommand to insert "\\" when pressing Enter inside a pmatrix

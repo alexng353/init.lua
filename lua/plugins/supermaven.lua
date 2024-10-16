@@ -1,6 +1,8 @@
 local pwd = vim.fn.getcwd()
 
-if string.match(pwd, "cmpt125") then
+-- /Users/alex/Documents/college/College/2024 Fall/CMPT 125/Assignments
+
+if (string.match(pwd, "cmpt125") or string.match(pwd, "Assignments")) then
   print("Supermaven disabled")
   return {}
 end

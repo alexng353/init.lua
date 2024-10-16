@@ -10,7 +10,8 @@ require("alexng353")
 --   lockfile = vim.fn.stdpath("config") .. "/lazy-lock.json", -- lockfile generated after running update.
 -- })
 
-vim.cmd.colorscheme "catppuccin-macchiato"
+vim.cmd.colorscheme "tokyonight-night"
+-- vim.cmd.colorscheme "catppuccin-macchiato"
 -- make the background transparent
 -- vim.cmd('highlight Normal guibg=NONE ctermbg=NONE')
 

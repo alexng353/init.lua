@@ -5,6 +5,11 @@ if string.match(pwd, "cmpt125") then
   return {}
 end
 
+if string.match(pwd, "college") then
+  print("Supermaven disabled")
+  return {}
+end
+
 local os = require("alexng353.helpers").getOS()
 
 local accept = os == "Linux" and "<M-;>" or "<D-;>"

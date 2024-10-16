@@ -201,3 +201,5 @@ vim.api.nvim_create_autocmd("TextChangedI", {
 --   end,
 -- { silent = true }
 -- )
+
+vim.api.nvim_set_keymap('n', 'm', 's', { noremap = true, silent = true })

@@ -35,22 +35,28 @@ ls.add_snippets("tex", {
   --   t("$$"), i(1, "input"), t("$$")
   -- }),
   s("neg", {
-    t("\\neg "), i(1, "input")
+    t("\\neg "), i(1, "")
   }),
   s("frac", {
     t("\\frac{"), i(1, "num"), t("}{"), i(2, "den"), t("}")
   }),
   s("land", {
-    t("\\land "), i(1, "input")
+    t("\\land "), i(1, "")
   }),
   s("lor", {
-    t("\\lor "), i(1, "input")
+    t("\\lor "), i(1, "")
   }),
   s("RR", {
-    t("\\mathbb{R} "), i(1, "input")
+    t("\\mathbb{R} "), i(1, "")
   }),
   s("Rn", {
-    t("\\mathbb{R}^n "), i(1, "input")
+    t("\\mathbb{R}^n "), i(1, "")
+  }),
+  s("mbf", {
+    t("\\mathbb{"), i(1, ""), t("} ")
+  }),
+  s("\"", {
+    t("\\text{"), i(1, ""), t("} ")
   }),
 })
 

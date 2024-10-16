@@ -1,6 +1,7 @@
 -- 80 column line
 vim.cmd('autocmd VimEnter * silent! set colorcolumn=80')
 vim.cmd('autocmd VimEnter * silent! hi ColorColumn ctermbg=#242424 guibg=#242424')
+-- vim.cmd('autocmd VimEnter * silent! hi ColorColumn ctermbg=#ffffff guibg=#ffffff')
 
 vim.api.nvim_set_option("clipboard", "unnamedplus")
 vim.api.nvim_set_option("ignorecase", true)
@@ -36,3 +37,5 @@ vim.opt.termguicolors = true
 vim.opt.shell = "/bin/zsh"
 
 vim.o.wrap = false
+
+vim.opt.termguicolors = true

@@ -1,6 +1,5 @@
 local M = {}
-function M.getOS()
-  -- ask LuaJIT first
+function M.getOS() -- ask LuaJIT first
   if jit then
     return jit.os
   end

@@ -4,7 +4,7 @@ vim.keymap.set("n", "<Leader>w", ":w<Cr>:echo 'wrote to file'<Cr>", { noremap = 
 vim.keymap.set("n", "<Leader>qq", ":x<Cr>", { noremap = true, silent = true })
 
 -- "Greatest keymap ever"
-vim.keymap.set("x", "<leader>p", [["_dP]])
+vim.keymap.set("x", "<leader>P", [["_dP]])
 
 -- Movement
 vim.keymap.set("n", "J", "mzJ`z")
@@ -32,6 +32,7 @@ end)
 -- Buffer
 vim.keymap.set('n', "[b", ":bprevious<CR>", { noremap = true })
 vim.keymap.set('n', "]b", ":bnext<CR>", { noremap = true })
+-- buf deleete
 vim.keymap.set('n', "<leader>bc", function()
   local current_buf = vim.api.nvim_get_current_buf()
   local next_buf = vim.fn.bufnr('#')
@@ -95,11 +96,11 @@ SurroundSelection = function(start_char, end_char)
 end
 
 -- Key mappings for visual mode
-vim.api.nvim_set_keymap('v', '<leader>[', ':lua SurroundSelection("[", "]")<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('v', '<leader>\'', ':lua SurroundSelection("\'", "\'")<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('v', '<leader>"', ':lua SurroundSelection("\\\"", "\\\"")<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('v', '<leader>(', ':lua SurroundSelection("(", ")")<CR>', { noremap = true, silent = true })
 
+vim.keymap.set('n', '<leader>[', function() SurroundSelection("[", "]") end, { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>\'', function() SurroundSelection("\'", "\'") end, { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>"', function() SurroundSelection("\\\"", "\\\"") end, { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>(', function() SurroundSelection("(", ")") end, { noremap = true, silent = true })
 
 -- Insert lorem ipsum
 local lipsum =
@@ -203,3 +204,73 @@ vim.api.nvim_create_autocmd("TextChangedI", {
 -- )
 
 vim.api.nvim_set_keymap('n', 'm', 's', { noremap = true, silent = true })
+
+function convert_to_bmatrix()
+  -- Get the visual selection
+  local start_row, start_col = vim.fn.getpos("'<")[2], vim.fn.getpos("'<")[3]
+  local end_row, end_col = vim.fn.getpos("'>")[2], vim.fn.getpos("'>")[3]
+  local lines = vim.fn.getline(start_row, end_row)
+
+  -- Process each line to remove brackets and reformat for bmatrix
+  for i, line in ipairs(lines) do
+    -- Remove square brackets and trim whitespace
+    line = line:gsub("[%[%]]", ""):gsub("^%s*(.-)%s*$", "%1")
+    -- Replace spaces between elements with " & " for LaTeX compatibility
+    lines[i] = line:gsub("%s+", " & ")
+  end
+
+  -- Join lines with " \\ " to format rows correctly in bmatrix
+  local matrix_body = table.concat(lines, " \\\\\n")
+
+  -- Replace selection with LaTeX bmatrix environment
+  vim.fn.setline(start_row, "\\begin{bmatrix}")
+  vim.fn.append(start_row, matrix_body)
+  vim.fn.append(start_row + #lines, "\\end{bmatrix}")
+
+  -- Remove original lines if the selection spanned multiple lines
+  if #lines > 1 then
+    vim.fn.deletebufline('%', start_row + 1, start_row + #lines)
+  end
+end
+
+-- Map the function to a visual mode key (e.g., `<leader>b`)
+vim.api.nvim_set_keymap('v', '<leader>b', [[:lua convert_to_bmatrix()<CR>]], { noremap = true, silent = true })
+
+vim.keymap.set('n', '<leader>gd', function()
+  local current_date = os.date("%B %d, %Y") -- Formats the date as "Month Day, Year"
+  local latex_document = [[\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{wasysym}
+\usepackage{ulem}
+
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\Nul}{Nul}
+\DeclareMathOperator{\Row}{Row}
+\DeclareMathOperator{\proj}{proj}
+
+\begin{document}
+
+\renewcommand{\arraystretch}{1.25} % Adjust row spacing
+\setlength{\arraycolsep}{12pt}
+
+\title{MACM 316 Lecture e}
+\author{Alexander Ng}
+\date{]] .. current_date .. [[}
+
+\maketitle
+
+\end{document}
+]]
+  -- Split the document into lines and insert it into the current buffer
+  vim.api.nvim_put(vim.split(latex_document, '\n'), '', true, true)
+end, { noremap = true, silent = true })

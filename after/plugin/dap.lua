@@ -1,0 +1,10 @@
+local dap, dapui = require("dap"), require("dapui")
+
+vim.keymap.set("n", "<Leader>du", function() dapui.toggle() end, { desc = "Toggle DAP UI" })
+vim.keymap.set("n", "<Leader>db", function() dap.toggle_breakpoint() end, { desc = "Toggle Breakpoint" })
+vim.keymap.set("n", "<Leader>dc", function() dap.continue() end, { desc = "Start/Continue Debugging" })
+vim.keymap.set("n", "<Leader>ds", function() dap.step_over() end, { desc = "Step Over" })
+vim.keymap.set("n", "<Leader>di", function() dap.step_into() end, { desc = "Step Into" })
+vim.keymap.set("n", "<Leader>do", function() dap.step_out() end, { desc = "Step Out" })
+vim.keymap.set("n", "<Leader>dr", function() dap.repl.open() end, { desc = "Open REPL" })
+vim.keymap.set("n", "<Leader>dl", function() dap.run_last() end, { desc = "Run Last Debug Session" })

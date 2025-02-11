@@ -61,6 +61,9 @@ ls.add_snippets("tex", {
   s("@today", {
     t(os.date("%B %d, %Y")), i(0)
   }),
+  s("nxn", {
+    t("n \\times n"), i(0)
+  }),
   -- s("@document", {
   --   t(document_header), i(0)
   -- }),

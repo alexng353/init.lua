@@ -23,8 +23,12 @@ NVIM_APPNAME=alexng353/init.lua/ nvim
 
 ## Plugins
 
+### ai
+
++ [supermaven-inc/supermaven-nvim](https://dotfyle.com/plugins/supermaven-inc/supermaven-nvim)
 ### colorscheme
 
++ [folke/tokyonight.nvim](https://dotfyle.com/plugins/folke/tokyonight.nvim)
 + [catppuccin/nvim](https://dotfyle.com/plugins/catppuccin/nvim)
 ### comment
 
@@ -33,7 +37,6 @@ NVIM_APPNAME=alexng353/init.lua/ nvim
 ### completion
 
 + [hrsh7th/nvim-cmp](https://dotfyle.com/plugins/hrsh7th/nvim-cmp)
-+ [zbirenbaum/copilot.lua](https://dotfyle.com/plugins/zbirenbaum/copilot.lua)
 ### diagnostics
 
 + [folke/trouble.nvim](https://dotfyle.com/plugins/folke/trouble.nvim)
@@ -88,6 +91,7 @@ NVIM_APPNAME=alexng353/init.lua/ nvim
 ## Language Servers
 
 + rust_analyzer
++ svelte
 + tsserver
 
 

@@ -234,44 +234,5 @@ end
 -- Map the function to a visual mode key (e.g., `<leader>b`)
 vim.api.nvim_set_keymap('v', '<leader>b', [[:lua convert_to_bmatrix()<CR>]], { noremap = true, silent = true })
 
-vim.keymap.set('n', '<leader>gd', function()
-  local current_date = os.date("%B %d, %Y") -- Formats the date as "Month Day, Year"
-  local latex_document = [[\documentclass[12pt]{article}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{amsthm}
-\usepackage{amsfonts}
-\usepackage{graphicx}
-\usepackage{textcomp}
-\usepackage{hyperref}
-\usepackage{tikz}
-\usepackage{enumitem}
-\usepackage{mathtools}
-\usepackage{enumitem}
-\usepackage{wasysym}
-\usepackage{ulem}
-
-\DeclareMathOperator{\dist}{dist}
-\DeclareMathOperator{\Nul}{Nul}
-\DeclareMathOperator{\Row}{Row}
-\DeclareMathOperator{\proj}{proj}
-
-\begin{document}
-
-\renewcommand{\arraystretch}{1.25} % Adjust row spacing
-\setlength{\arraycolsep}{12pt}
-
-\title{MACM 316 Lecture e}
-\author{Alexander Ng}
-\date{]] .. current_date .. [[}
-
-\maketitle
-
-\end{document}
-]]
-  -- Split the document into lines and insert it into the current buffer
-  vim.api.nvim_put(vim.split(latex_document, '\n'), '', true, true)
-end, { noremap = true, silent = true })
-
 vim.api.nvim_set_keymap('n', '<leader>cf', ':let @+ = expand("%:p")<CR>',
   { noremap = true, silent = true, desc = "Copy file path to clipboard" })

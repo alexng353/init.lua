@@ -6,14 +6,13 @@ vim.keymap.set("n", "<leader>a", mark.add_file)
 vim.keymap.set("n", "<leader>e", ui.toggle_quick_menu)
 vim.keymap.set("n", "<leader>o", ui.toggle_quick_menu)
 
-
 local osname = helpers.getOS()
 if (osname == "Linux")
 then
-  vim.keymap.set("n", "<M-j>", function() ui.nav_file(1) end)
-  vim.keymap.set("n", "<M-k>", function() ui.nav_file(2) end)
-  vim.keymap.set("n", "<M-l>", function() ui.nav_file(3) end)
-  vim.keymap.set("n", "<M-;>", function() ui.nav_file(4) end)
+  vim.keymap.set("n", "<C-j>", function() ui.nav_file(1) end)
+  vim.keymap.set("n", "<C-k>", function() ui.nav_file(2) end)
+  vim.keymap.set("n", "<C-l>", function() ui.nav_file(3) end)
+  vim.keymap.set("n", "<C-;>", function() ui.nav_file(4) end)
 else
   vim.keymap.set("n", "<D-j>", function() ui.nav_file(1) end)
   vim.keymap.set("n", "<C-L>", function() ui.nav_file(2) end)

@@ -108,8 +108,6 @@ local lipsum =
 vim.keymap.set('n', "<leader>il", function()
   vim.api.nvim_put({ lipsum }, "c", true, true)
 end, { noremap = true, silent = true })
-
-
 -- snippets
 
 local ls = require("luasnip")
@@ -274,3 +272,6 @@ vim.keymap.set('n', '<leader>gd', function()
   -- Split the document into lines and insert it into the current buffer
   vim.api.nvim_put(vim.split(latex_document, '\n'), '', true, true)
 end, { noremap = true, silent = true })
+
+vim.api.nvim_set_keymap('n', '<leader>cf', ':let @+ = expand("%:p")<CR>',
+  { noremap = true, silent = true, desc = "Copy file path to clipboard" })

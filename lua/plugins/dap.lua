@@ -12,18 +12,6 @@ return {
     config = function()
       require("dapui").setup()
       require("nvim-dap-virtual-text").setup()
-
-      -- Auto open/close DAP UI
-      local dap, dapui = require("dap"), require("dapui")
-      dap.listeners.after.event_initialized["dapui_config"] = function()
-        dapui.open()
-      end
-      dap.listeners.before.event_terminated["dapui_config"] = function()
-        dapui.close()
-      end
-      dap.listeners.before.event_exited["dapui_config"] = function()
-        dapui.close()
-      end
     end
   },
   {
@@ -32,11 +20,12 @@ return {
     config = function()
       require("mason-nvim-dap").setup({
         ensure_installed = {
-          "python", -- Python debugging
-          "cppdbg", -- C/C++ debugging
-          "node2",  -- JavaScript debugging
-          "go",     -- Go debugging
+          "python",   -- Python debugging
+          "cppdbg",   -- C/C++ debugging
+          "node2",    -- JavaScript debugging
+          "go",       -- Go debugging
           "codelldb", -- Rust debugging
+          "cpptools", -- C++ debugging
         },
         automatic_installation = true,
       })

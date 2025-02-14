@@ -26,7 +26,6 @@ lsp_zero.on_attach(function(client, bufnr)
     { desc = 'Goto Document Symbols', buffer = bufnr })
   vim.keymap.set('n', '<leader>lS', require('telescope.builtin').lsp_dynamic_workspace_symbols,
     { desc = 'Goto Workspace Symbols', buffer = bufnr })
-  -- vim.keymap.set('n', '<F5>', require('telescope.builtin').lsp_dynamic_workspace_symbols
 end)
 
 -- here you can setup the language servers

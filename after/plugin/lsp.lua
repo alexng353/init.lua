@@ -8,7 +8,6 @@ lsp_zero.on_attach(function(client, bufnr)
     preserve_mappings = false
   })
 
-
   vim.keymap.set("n", "<leader>lf", function()
     vim.lsp.buf.format()
     print("formatted buffer")
@@ -16,10 +15,11 @@ lsp_zero.on_attach(function(client, bufnr)
 
   vim.keymap.set('n', '<leader>la', vim.lsp.buf.code_action, { desc = 'LSP Code Action', buffer = bufnr })
   vim.keymap.set('n', '<leader>lr', vim.lsp.buf.rename, { desc = 'LSP Rename', buffer = bufnr })
-  vim.keymap.set('n', 'gr', require('telescope.builtin').lsp_references, { desc = 'Goto References', buffer = bufnr })
-  vim.keymap.set('n', 'gd', require('telescope.builtin').lsp_definitions, { desc = 'Goto Definitions', buffer = bufnr })
+  vim.keymap.set('n', 'gr', require('telescope.builtin').lsp_references, { desc = '[g]oto [r]eferences', buffer = bufnr })
+  vim.keymap.set('n', 'gd', require('telescope.builtin').lsp_definitions,
+    { desc = '[g]oto [d]efinitions', buffer = bufnr })
   vim.keymap.set('n', 'gI', require('telescope.builtin').lsp_implementations,
-    { desc = 'Goto Implementations', buffer = bufnr })
+    { desc = '[g]oto [I]mplementations', buffer = bufnr })
   vim.keymap.set('n', '<leader>lD', require('telescope.builtin').lsp_type_definitions,
     { desc = 'Goto Type Definitions', buffer = bufnr })
   vim.keymap.set('n', '<leader>ls', require('telescope.builtin').lsp_document_symbols,

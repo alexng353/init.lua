@@ -99,7 +99,7 @@ end
 
 vim.keymap.set('n', '<leader>[', function() SurroundSelection("[", "]") end, { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>\'', function() SurroundSelection("\'", "\'") end, { noremap = true, silent = true })
-vim.keymap.set('n', '<leader>"', function() SurroundSelection("\\\"", "\\\"") end, { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>"', function() SurroundSelection("\"", "\"") end, { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>(', function() SurroundSelection("(", ")") end, { noremap = true, silent = true })
 
 -- Insert lorem ipsum

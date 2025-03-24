@@ -21,3 +21,11 @@ vim.o.cursorline = true
 
 vim.cmd('highlight LineNr guifg=#FFD700')
 vim.cmd('highlight CursorLineNr guifg=#00FFFF')
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "tex",
+  callback = function()
+    vim.opt_local.textwidth = 80
+    vim.opt_local.formatoptions:append("t")
+  end
+})

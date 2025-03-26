@@ -57,6 +57,7 @@ return {
         "rust",
         "cpp"
       },
+      auto_install = true,
       highlight = {
         enable = true,
         disable = function(_, bufnr) return vim.b[bufnr].large_buf end,

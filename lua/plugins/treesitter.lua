@@ -6,6 +6,10 @@ return {
     -- HACK: remove when https://github.com/windwp/nvim-ts-autotag/issues/125 closed.
     "windwp/nvim-ts-autotag",
   },
+  enabled = function()
+    local cwd = vim.fn.getcwd()
+    return cwd ~= vim.fn.expand("~/MACM316/notes")
+  end,
   event = { "BufReadPost", "BufNewFile" },
   cmd = {
     "TSBufDisable",

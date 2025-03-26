@@ -70,37 +70,33 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 -- Function to surround visual selection with brackets or quotes
-SurroundSelection = function(start_char, end_char)
-  -- Get the current visual selection
-  local start_pos = vim.fn.getpos("'<")
-  local end_pos = vim.fn.getpos("'>")
+local function SurroundSelection(start_char, end_char)
+  local api = vim.api
 
-  -- Get the lines in the visual selection
-  local lines = vim.fn.getline(start_pos[2], end_pos[2])
+  -- Yank the current selection into register "x"
+  vim.cmd('normal! "xy')
+  local selected_text = vim.fn.getreg('x')
 
-  -- If the selection is on a single line, adjust the start and end columns
-  if #lines == 1 then
-    lines[1] = lines[1]:sub(1, start_pos[3] - 1) ..
-        start_char .. lines[1]:sub(start_pos[3], end_pos[3]) .. end_char .. lines[1]:sub(end_pos[3] + 1)
-  else
-    -- For multi-line selection, add start_char and end_char to the first and last lines
-    lines[1] = lines[1]:sub(1, start_pos[3] - 1) .. start_char .. lines[1]:sub(start_pos[3])
-    lines[#lines] = lines[#lines]:sub(1, end_pos[3]) .. end_char .. lines[#lines]:sub(end_pos[3] + 1)
-  end
+  -- Get the current line
+  local line_num = api.nvim_win_get_cursor(0)[1]
+  local line = api.nvim_get_current_line()
 
-  -- Set the modified lines back to the buffer
-  vim.fn.setline(start_pos[2], lines)
+  -- Create the new surrounded text
+  local new_text = start_char .. selected_text .. end_char
 
-  -- Exit visual mode
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), 'n', true)
+  -- Replace the selected text with the new one in the line
+  local new_line = line:gsub(vim.pesc(selected_text), new_text, 1)
+
+  -- Set the modified line
+  api.nvim_set_current_line(new_line)
 end
 
 -- Key mappings for visual mode
 
-vim.keymap.set('n', '<leader>[', function() SurroundSelection("[", "]") end, { noremap = true, silent = true })
-vim.keymap.set('n', '<leader>\'', function() SurroundSelection("\'", "\'") end, { noremap = true, silent = true })
-vim.keymap.set('n', '<leader>"', function() SurroundSelection("\"", "\"") end, { noremap = true, silent = true })
-vim.keymap.set('n', '<leader>(', function() SurroundSelection("(", ")") end, { noremap = true, silent = true })
+vim.keymap.set('v', '[', function() SurroundSelection("[", "]") end, { noremap = true, silent = true })
+vim.keymap.set('v', '\'', function() SurroundSelection("\'", "\'") end, { noremap = true, silent = true })
+vim.keymap.set('v', '"', function() SurroundSelection("\"", "\"") end, { noremap = true, silent = true })
+vim.keymap.set('v', '(', function() SurroundSelection("(", ")") end, { noremap = true, silent = true })
 
 -- Insert lorem ipsum
 local lipsum =

@@ -43,6 +43,13 @@ require('mason-lspconfig').setup({
           client.server_capabilities.documentFormattingProvider = false
           client.server_capabilities.documentRangeFormattingProvider = false
         end
+        -- settings = {
+        --   typescript = {
+        --     tsserver = {
+        --       maxTsServerMemory = 8192
+        --     }
+        --   }
+        -- }
       })
     end,
     lua_ls = function()

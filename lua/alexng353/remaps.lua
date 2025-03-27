@@ -97,6 +97,7 @@ vim.keymap.set('v', '[', function() SurroundSelection("[", "]") end, { noremap =
 vim.keymap.set('v', '\'', function() SurroundSelection("\'", "\'") end, { noremap = true, silent = true })
 vim.keymap.set('v', '"', function() SurroundSelection("\"", "\"") end, { noremap = true, silent = true })
 vim.keymap.set('v', '(', function() SurroundSelection("(", ")") end, { noremap = true, silent = true })
+vim.keymap.set('v', '<leader>{', function() SurroundSelection("{", "}") end, { noremap = true, silent = true })
 
 -- Insert lorem ipsum
 local lipsum =

@@ -39,11 +39,6 @@ return {
   end,
   opts = function()
     return {
-      autotag = { enable = true },
-      -- context_commentstring = {
-      --   enable = true,
-      --   enable_autocmd = false
-      -- },
       -- HACK: force install of shipped neovim parsers since TSUpdate doesn't correctly update them
       ensure_installed = {
         "bash",

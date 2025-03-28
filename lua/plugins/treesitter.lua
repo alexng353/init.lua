@@ -8,7 +8,7 @@ return {
   },
   enabled = function()
     local cwd = vim.fn.getcwd()
-    return cwd ~= vim.fn.expand("~/MACM316/notes")
+    return cwd ~= vim.fn.expand("~/Documents/MACM316/notes")
   end,
   event = { "BufReadPost", "BufNewFile" },
   cmd = {

@@ -1,7 +1,7 @@
 -- Leader
 vim.keymap.set("n", "<Leader>pv", vim.cmd.Ex, { noremap = true, silent = true })
 vim.keymap.set("n", "<Leader>w", ":w<Cr>:echo 'wrote to file'<Cr>", { noremap = true, silent = true })
-vim.keymap.set("n", "<Leader>qq", ":x<Cr>", { noremap = true, silent = true })
+vim.keymap.set("n", "<Leader>qq", ":wqa<Cr>", { noremap = true, silent = true })
 
 -- "Greatest keymap ever"
 vim.keymap.set("x", "<leader>P", [["_dP]])

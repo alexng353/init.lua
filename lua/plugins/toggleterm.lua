@@ -71,8 +71,9 @@ return {
       })
     end,
     keys = {
-      { "<F12>" },
-      { "<Leader>to", "<cmd>ToggleTerm direction=float<CR>", desc = "terminal float" }
+      -- { "<F12>" },
+      { "<Leader>to", "<cmd>ToggleTerm direction=float<CR>", desc = "terminal float" },
+      { "<F12>", "<cmd>ToggleTerm direction=float<CR>", desc = "terminal float" }
     }
   }
 }

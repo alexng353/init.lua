@@ -1,7 +1,16 @@
 -- Leader
 vim.keymap.set("n", "<Leader>pv", vim.cmd.Ex, { noremap = true, silent = true })
 vim.keymap.set("n", "<Leader>w", ":w<Cr>:echo 'wrote to file'<Cr>", { noremap = true, silent = true })
-vim.keymap.set("n", "<Leader>qq", ":wqa<Cr>", { noremap = true, silent = true })
+vim.keymap.set("n", "<Leader>qq", function()
+  -- Save all writable and modified buffers
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.api.nvim_buf_is_loaded(buf) and vim.api.nvim_buf_get_option(buf, "modifiable") and vim.api.nvim_buf_get_option(buf, "buftype") == "" then
+      vim.api.nvim_command("silent! write")
+    end
+  end
+  -- Quit all
+  vim.cmd("qa")
+end, { noremap = true, silent = true })
 
 -- "Greatest keymap ever"
 vim.keymap.set("x", "<leader>P", [["_dP]])

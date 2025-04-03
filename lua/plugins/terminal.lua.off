@@ -1,0 +1,50 @@
+return {
+  {
+    "rebelot/terminal.nvim",
+    config = function()
+      require('terminal').setup({
+        float_opts = {
+          -- The border key is *almost* the same as 'nvim_open_win'
+          -- see :h nvim_open_win for details on borders however
+          -- the 'curved' border is a custom border type
+          -- not natively supported but implemented in this plugin.
+          border = "curved",
+          -- border = 'single' | 'double' | 'shadow' | 'curved', -- | ... other options supported by win open
+          -- like `size`, width, height, row, and col can be a number or function which is passed the current terminal
+          -- width = <value>,
+          -- height = <value>,
+          -- row = <value>,
+          -- col = <value>,
+          -- winblend = 3,
+          -- zindex = <value>,
+          -- title_pos = 'left' | 'center' | 'right', -- position of the title of the floating window
+          title_pos = "center",
+        },
+        winbar = {
+          enabled = false,
+          name_formatter = function(term) --  term: Terminal
+            return term.name
+          end
+        },
+      })
+
+      vim.keymap.set("t", "<esc>", "<c-\\><c-n>")
+
+      local term_map = require("terminal.mappings")
+      vim.keymap.set({ "n", "x" }, "<leader>ts", term_map.operator_send, { expr = true })
+      vim.keymap.set("n", "<leader>to", term_map.toggle({ open_cmd = "float" }), { desc = "Toggle terminal" })
+      vim.keymap.set("n", "<leader>tO", term_map.toggle)
+      vim.keymap.set("n", "<leader>tr", term_map.run)
+      vim.keymap.set("n", "<leader>tR", term_map.run(nil, { layout = { open_cmd = "enew" } }))
+      vim.keymap.set("n", "<leader>tk", term_map.kill)
+      vim.keymap.set("n", "<leader>t]", term_map.cycle_next)
+      vim.keymap.set("n", "<leader>t[", term_map.cycle_prev)
+      vim.keymap.set("n", "<leader>tl", term_map.move({ open_cmd = "belowright vnew" }))
+      vim.keymap.set("n", "<leader>tL", term_map.move({ open_cmd = "botright vnew" }))
+      vim.keymap.set("n", "<leader>th", term_map.move({ open_cmd = "belowright new" }))
+      vim.keymap.set("n", "<leader>tH", term_map.move({ open_cmd = "botright new" }))
+      vim.keymap.set("n", "<leader>tf", term_map.move({ open_cmd = "float" }),
+        { desc = "Move terminal to floating window" })
+    end
+  }
+}

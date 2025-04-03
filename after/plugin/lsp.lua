@@ -1,4 +1,5 @@
 local lsp_zero = require('lsp-zero')
+local telescope = require('telescope.builtin')
 
 lsp_zero.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings
@@ -9,23 +10,21 @@ lsp_zero.on_attach(function(client, bufnr)
   })
 
   vim.keymap.set("n", "<leader>lf", function()
-    vim.lsp.buf.format()
+    vim.lsp.buf.format({ async = true })
     print("formatted buffer")
-  end, { buffer = bufnr, desc = 'Format current buffer' })
+  end, { buffer = bufnr, desc = 'Format file' })
 
-  vim.keymap.set('n', '<leader>la', vim.lsp.buf.code_action, { desc = 'LSP Code Action', buffer = bufnr })
-  vim.keymap.set('n', '<leader>lr', vim.lsp.buf.rename, { desc = 'LSP Rename', buffer = bufnr })
-  vim.keymap.set('n', 'gr', require('telescope.builtin').lsp_references, { desc = '[g]oto [r]eferences', buffer = bufnr })
-  vim.keymap.set('n', 'gd', require('telescope.builtin').lsp_definitions,
-    { desc = '[g]oto [d]efinitions', buffer = bufnr })
-  vim.keymap.set('n', 'gI', require('telescope.builtin').lsp_implementations,
-    { desc = '[g]oto [I]mplementations', buffer = bufnr })
-  vim.keymap.set('n', '<leader>lD', require('telescope.builtin').lsp_type_definitions,
-    { desc = 'Goto Type Definitions', buffer = bufnr })
-  vim.keymap.set('n', '<leader>ls', require('telescope.builtin').lsp_document_symbols,
-    { desc = 'Goto Document Symbols', buffer = bufnr })
-  vim.keymap.set('n', '<leader>lS', require('telescope.builtin').lsp_dynamic_workspace_symbols,
-    { desc = 'Goto Workspace Symbols', buffer = bufnr })
+  vim.keymap.set('n', '<leader>la', vim.lsp.buf.code_action, { desc = '[l]SP Code [a]ction', buffer = bufnr })
+  vim.keymap.set('n', '<leader>lr', vim.lsp.buf.rename, { desc = '[l]SP [r]ename', buffer = bufnr })
+  vim.keymap.set('n', 'gr', telescope.lsp_references, { desc = '[g]oto [r]eferences', buffer = bufnr })
+  vim.keymap.set('n', 'gd', telescope.lsp_definitions, { desc = '[g]oto [d]efinitions', buffer = bufnr })
+  vim.keymap.set('n', 'gI', telescope.lsp_implementations, { desc = '[g]oto [I]mplementations', buffer = bufnr })
+  vim.keymap.set('n', '<leader>lD', telescope.lsp_type_definitions,
+    { desc = 'Goto Type [D]efinitions', buffer = bufnr })
+  vim.keymap.set('n', '<leader>ls', telescope.lsp_document_symbols,
+    { desc = 'Goto Document [s]ymbols', buffer = bufnr })
+  vim.keymap.set('n', '<leader>lS', telescope.lsp_dynamic_workspace_symbols,
+    { desc = 'Goto Workspace [S]ymbols', buffer = bufnr })
 end)
 
 -- here you can setup the language servers

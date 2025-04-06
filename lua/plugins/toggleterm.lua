@@ -20,7 +20,7 @@ return {
           elseif term.direction == "vertical" then
             return vim.o.columns * 0.4
           else
-            return 17
+            return vim.o.columns * 0.8
           end
         end,
         open_mapping = [[<F12>]],

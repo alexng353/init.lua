@@ -242,3 +242,30 @@ vim.api.nvim_set_keymap('v', '<leader>b', [[:lua convert_to_bmatrix()<CR>]], { n
 
 vim.api.nvim_set_keymap('n', '<leader>cf', ':let @+ = expand("%:p")<CR>',
   { noremap = true, silent = true, desc = "Copy file path to clipboard" })
+
+local Terminal = require('toggleterm.terminal').Terminal
+local default_shell = Terminal:new({ cmd = 'zsh', hidden = true })
+vim.keymap.set(
+  'n',
+  '<leader>to',
+  function()
+    default_shell:toggle()
+  end,
+  { noremap = true, silent = true, desc = "Toggle terminal" }
+)
+vim.keymap.set(
+  'n',
+  '<F12>',
+  function()
+    default_shell:toggle()
+  end,
+  { noremap = true, silent = true, desc = "Toggle terminal" }
+)
+-- vim.keymap.set(
+--   't',
+--   '<F12>',
+--   function()
+--     default_shell:toggle()
+--   end,
+--   { noremap = true, silent = true, desc = "Open terminal" }
+-- )

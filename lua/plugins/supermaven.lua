@@ -15,7 +15,6 @@ end
 local os = require("alexng353.helpers").getOS()
 
 local accept = os == "Linux" and "<M-;>" or "<D-;>"
-local open = os == "Linux" and "<M-CR>" or "<D-CR>"
 
 return {
   "supermaven-inc/supermaven-nvim",
@@ -24,7 +23,7 @@ return {
       keymaps = {
         accept_suggestion = accept,
         clear_suggestion = "<C-]>",
-        accept_word = "<C-j>",
+        accept_word = "<M-'>",
       },
       ignore_filetypes = { cpp = true },
       color = {

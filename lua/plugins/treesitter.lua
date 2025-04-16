@@ -5,9 +5,11 @@ return {
     "nvim-treesitter/nvim-treesitter-textobjects",
   },
   enabled = function()
+    local filetype = vim.bo.filetype
     local cwd = vim.fn.getcwd()
     return cwd ~= vim.fn.expand("~/Documents/MACM316/notes") and
-        cwd ~= vim.fn.expand("~/Documents/college/College/2025 Spring/MACM316/notes/notes")
+      cwd ~= vim.fn.expand("~/Documents/college/College/2025 Spring/MACM316/notes/notes")
+      and filetype ~= "tex"
   end,
   event = { "BufReadPost", "BufNewFile" },
   cmd = {

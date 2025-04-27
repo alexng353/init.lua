@@ -64,7 +64,9 @@ return {
       auto_install = true,
       highlight = {
         enable = true,
-        disable = function(_, bufnr) return vim.b[bufnr].large_buf end,
+        disable = function(lang, bufnr)
+          return vim.b[bufnr].large_buf or lang == "tex"
+        end,
       },
       incremental_selection = { enable = true },
       indent = { enable = true },

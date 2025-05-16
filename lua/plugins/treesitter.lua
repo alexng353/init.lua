@@ -4,14 +4,14 @@ return {
     "JoosepAlviste/nvim-ts-context-commentstring",
     "nvim-treesitter/nvim-treesitter-textobjects",
   },
-  enabled = function()
-    local filetype = vim.bo.filetype
-    local cwd = vim.fn.getcwd()
-    return cwd ~= vim.fn.expand("~/Documents/MACM316/notes") and
-    cwd ~= vim.fn.expand("~/Documents/college/College/2025 Spring/MACM316/notes/notes")
-    and filetype ~= "tex" and
-    cwd ~= vim.fn.expand("/Users/alex/Documents/college/College/2025 Spring/MACM316/notes/notes")
-  end,
+  -- enabled = function()
+  --   local filetype = vim.bo.filetype
+  --   local cwd = vim.fn.getcwd()
+  --   return cwd ~= vim.fn.expand("~/Documents/MACM316/notes") and
+  --   cwd ~= vim.fn.expand("~/Documents/college/College/2025 Spring/MACM316/notes/notes")
+  --   and filetype ~= "tex" and
+  --   cwd ~= vim.fn.expand("/Users/alex/Documents/college/College/2025 Spring/MACM316/notes/notes")
+  -- end,
   event = { "BufReadPost", "BufNewFile" },
   cmd = {
     "TSBufDisable",
@@ -65,8 +65,8 @@ return {
       highlight = {
         enable = true,
         disable = function(lang, bufnr)
-          return vim.b[bufnr].large_buf or lang == "tex"
-        end,
+          return vim.b[bufnr].large_buf or lang == "tex" or lang == "latex"
+        end
       },
       incremental_selection = { enable = true },
       indent = { enable = true },

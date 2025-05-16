@@ -34,7 +34,7 @@ return {
       fold_virt_text_handler = handler,
       close_fold_kinds_for_ft = {
         default = {
-          'imports',
+          -- 'imports',
           -- 'comment'
         },
         json = { 'array' },

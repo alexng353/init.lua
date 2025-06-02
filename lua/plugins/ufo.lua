@@ -37,11 +37,11 @@ return {
           -- 'imports',
           -- 'comment'
         },
-        json = { 'array' },
-        c = {
+        -- json = { 'array' },
+        -- c = {
           -- 'comment',
-          'region'
-        }
+          -- 'region'
+        -- }
       },
       preview = {
         win_config = {

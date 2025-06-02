@@ -117,6 +117,16 @@ cmp.setup({
   }),
 })
 
+cmp.setup.filetype('markdown', {
+  sources = cmp.config.sources({
+    { name = 'path' },
+    { name = 'buffer' },
+  }),
+  completion = {
+    keyword_pattern = [[[^()\[\]\s]+]],
+  },
+})
+
 -- Load LuaSnip snippets
 -- require("luasnip.loaders.from_vscode").lazy_load() -- Load snippets from VSCode-style snippets
 --

@@ -64,8 +64,19 @@ require('mason-lspconfig').setup({
           }
         }
       })
-    end
-  },
+    end,
+    tinymist = function()
+      require("lspconfig")["tinymist"].setup {
+        settings = {
+          formatterMode = "typstyle",
+          exportPdf = "onType",
+          semanticTokens = "disable"
+        }
+
+      }
+    end,
+  }
+
   -- matlab_ls = function()
   -- end
 })
@@ -112,6 +123,7 @@ cmp.setup({
   sources = cmp.config.sources({
     { name = 'luasnip' },  -- LuaSnip integration
     { name = 'nvim_lsp' }, -- LSP source
+    { name = 'path' },
     -- Add other sources as necessary
     -- { name = 'supermaven' },
   }),

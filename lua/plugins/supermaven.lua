@@ -16,7 +16,7 @@ local os = require("alexng353.helpers").getOS()
 
 local accept = os == "Linux" and "<M-;>" or "<D-;>"
 local open = os == "Linux" and "<M-CR>" or "<D-CR>"
-local cw = os == "Linux" and "<C-j>" or "<D-'>"
+local cw = os == "Linux" and "<M-'>" or "<D-'>"
 
 return {
   "supermaven-inc/supermaven-nvim",

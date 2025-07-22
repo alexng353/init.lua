@@ -269,3 +269,25 @@ vim.keymap.set(
 --   end,
 --   { noremap = true, silent = true, desc = "Open terminal" }
 -- )
+
+
+-- 2) Keymap to toggle
+vim.keymap.set("n", "<leader>zen", function()
+  require("zen-mode").toggle()
+end, { noremap = true, silent = true, desc = "Toggle zen mode" })
+
+-- 3) On exit, check for the "zenmode-bg" buffer and toggle off if still open
+local exit_grp = vim.api.nvim_create_augroup("ExitHook", { clear = true })
+vim.api.nvim_create_autocmd("VimLeavePre", {
+  group = exit_grp,
+  callback = function()
+    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+      if vim.api.nvim_buf_is_loaded(buf)
+         and vim.api.nvim_buf_get_option(buf, "filetype") == "zenmode-bg"
+      then
+        require("zen-mode").toggle()
+        break
+      end
+    end
+  end,
+})

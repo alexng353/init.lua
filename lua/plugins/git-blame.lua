@@ -15,6 +15,6 @@ return {
     -- virtual_text_column = 80,
     ignored_filetypes = { "gitcommit", "gitrebase", "netrw" }, -- filetypes to ignore blame
     delay = 0,
+    max_commit_summary_length = 0, -- 0 means no limit
   },
 }
-

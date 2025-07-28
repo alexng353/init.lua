@@ -1,3 +1,4 @@
+-- This file definitely needs to be split up
 -- Leader
 vim.keymap.set("n", "<Leader>pv", vim.cmd.Ex, { noremap = true, silent = true })
 vim.keymap.set("n", "<Leader>w", ":w<Cr>:echo 'wrote to file'<Cr>", { noremap = true, silent = true })
@@ -117,6 +118,7 @@ vim.keymap.set('v', '\'', function() SurroundSelection("\'", "\'") end, { norema
 vim.keymap.set('v', '"', function() SurroundSelection("\"", "\"") end, { noremap = true, silent = true })
 vim.keymap.set('v', '(', function() SurroundSelection("(", ")") end, { noremap = true, silent = true })
 vim.keymap.set('v', '<leader>{', function() SurroundSelection("{", "}") end, { noremap = true, silent = true })
+vim.keymap.set('v', '<M-e>', function() SurroundSelection("{", "}") end, { noremap = true, silent = true })
 
 -- Insert lorem ipsum
 local lipsum =
@@ -257,4 +259,35 @@ vim.api.nvim_create_autocmd("VimLeavePre", {
       end
     end
   end,
+})
+
+-- Define a :Block command that adds `{` above and `}` below a visual‐line range
+vim.api.nvim_create_user_command('Block', function(opts)
+  -- opts.line1 and opts.line2 are 1‑indexed line numbers of the range
+  local bufnr      = vim.api.nvim_get_current_buf()
+  local start_line = opts.line1
+  local end_line   = opts.line2
+
+  -- Insert “{” on its own line above the first selected line
+  -- nvim_buf_set_lines expects 0‑based indices; start==end means “insert at that index”
+  vim.api.nvim_buf_set_lines(bufnr,
+    start_line - 1, -- start (0‑based)
+    start_line - 1, -- end (0‑based, exclusive)
+    false,          -- strict_indexing?
+    { '{' }         -- lines to insert
+  )
+
+  -- Insert “}” on its own line below the last selected line.
+  -- Because we added one line above, the original end_line has shifted down by +1.
+  vim.api.nvim_buf_set_lines(bufnr,
+    end_line + 1, -- start (0‑based) = original end_line+1
+    end_line + 1, -- end (exclusive)
+    false,
+    { '}' }
+  )
+
+  vim.lsp.buf.format({ async = true })
+end, {
+  range = true, -- make it accept a line range
+  desc  = 'Surround visual selection with { }'
 })

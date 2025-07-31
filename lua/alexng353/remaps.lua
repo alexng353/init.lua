@@ -98,7 +98,6 @@ local function SurroundSelection(start_char, end_char)
   local selected_text = vim.fn.getreg('x')
 
   -- Get the current line
-  local line_num = api.nvim_win_get_cursor(0)[1]
   local line = api.nvim_get_current_line()
 
   -- Create the new surrounded text
@@ -242,6 +241,7 @@ vim.keymap.set(
   end,
   { noremap = true, silent = true, desc = "Toggle terminal" }
 )
+
 vim.keymap.set("n", "<leader>zz", function()
   require("zen-mode").toggle()
 end, { noremap = true, silent = true, desc = "Toggle zen mode" })
@@ -290,4 +290,27 @@ vim.api.nvim_create_user_command('Block', function(opts)
 end, {
   range = true, -- make it accept a line range
   desc  = 'Surround visual selection with { }'
+})
+-- vim.keymap.set(
+--   't',
+--   '<F12>',
+--   function()
+--     default_shell:toggle()
+--   end,
+--   { noremap = true, silent = true, desc = "Open terminal" }
+-- )
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "typst",
+  callback = function()
+    vim.keymap.set('v', '<C-b>', function()
+      SurroundSelection("*", "*")
+    end, { noremap = true, silent = true })
+    vim.keymap.set('v', '<C-i>', function()
+      SurroundSelection("_", "_")
+    end, { noremap = true, silent = true })
+    vim.keymap.set('v', '<C-u>', function()
+      SurroundSelection("#underline[", "]")
+    end, { noremap = true, silent = true })
+  end,
 })

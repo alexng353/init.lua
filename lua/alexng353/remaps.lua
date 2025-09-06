@@ -314,3 +314,7 @@ vim.api.nvim_create_autocmd("FileType", {
     end, { noremap = true, silent = true })
   end,
 })
+
+-- git diff jumps
+vim.keymap.set('n', "]f", "/^diff --git<CR>", { noremap = true, silent = true })
+vim.keymap.set('n', "[f", "?^diff --git<CR>", { noremap = true, silent = true })

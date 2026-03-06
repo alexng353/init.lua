@@ -1,133 +1,103 @@
 return {
-  "nvim-treesitter/nvim-treesitter",
-  dependencies = {
-    "JoosepAlviste/nvim-ts-context-commentstring",
+  {
+    "nvim-treesitter/nvim-treesitter",
+    dependencies = {
+      "JoosepAlviste/nvim-ts-context-commentstring",
+    },
+    event = { "BufReadPost", "BufNewFile" },
+    cmd = {
+      "TSInstall",
+      "TSInstallInfo",
+      "TSInstallSync",
+      "TSUninstall",
+      "TSUpdate",
+      "TSUpdateSync",
+    },
+    build = ":TSUpdate",
+    init = function(plugin)
+      -- PERF: add nvim-treesitter queries to the rtp early
+      require("lazy.core.loader").add_to_rtp(plugin)
+    end,
+    config = function()
+      require("nvim-treesitter").setup {
+        ensure_installed = {
+          "bash", "c", "lua", "markdown", "markdown_inline", "python", "query",
+          "vim", "vimdoc", "typescript", "tsx", "css", "html", "javascript",
+          "json", "rust", "cpp",
+        },
+      }
+    end,
+  },
+  {
     "nvim-treesitter/nvim-treesitter-textobjects",
+    branch = "main",
+    event = { "BufReadPost", "BufNewFile" },
+    config = function()
+      local select = require("nvim-treesitter-textobjects.select")
+      local move = require("nvim-treesitter-textobjects.move")
+      local swap = require("nvim-treesitter-textobjects.swap")
+
+      require("nvim-treesitter-textobjects").setup {
+        select = { lookahead = true },
+        move = { set_jumps = true },
+      }
+
+      -- Select keymaps
+      local select_maps = {
+        ["ak"] = { "@block.outer", "around block" },
+        ["ik"] = { "@block.inner", "inside block" },
+        ["ac"] = { "@class.outer", "around class" },
+        ["ic"] = { "@class.inner", "inside class" },
+        ["a?"] = { "@conditional.outer", "around conditional" },
+        ["i?"] = { "@conditional.inner", "inside conditional" },
+        ["af"] = { "@function.outer", "around function" },
+        ["if"] = { "@function.inner", "inside function" },
+        ["al"] = { "@loop.outer", "around loop" },
+        ["il"] = { "@loop.inner", "inside loop" },
+        ["aa"] = { "@parameter.outer", "around argument" },
+        ["ia"] = { "@parameter.inner", "inside argument" },
+      }
+      for key, val in pairs(select_maps) do
+        vim.keymap.set({ "x", "o" }, key, function()
+          select.select_textobject(val[1], "textobjects")
+        end, { desc = val[2] })
+      end
+
+      -- Move keymaps
+      local move_maps = {
+        { "]k", "goto_next_start", "@block.outer", "Next block start" },
+        { "]f", "goto_next_start", "@function.outer", "Next function start" },
+        { "]a", "goto_next_start", "@parameter.inner", "Next argument start" },
+        { "]K", "goto_next_end", "@block.outer", "Next block end" },
+        { "]F", "goto_next_end", "@function.outer", "Next function end" },
+        { "]A", "goto_next_end", "@parameter.inner", "Next argument end" },
+        { "[k", "goto_previous_start", "@block.outer", "Previous block start" },
+        { "[f", "goto_previous_start", "@function.outer", "Previous function start" },
+        { "[a", "goto_previous_start", "@parameter.inner", "Previous argument start" },
+        { "[K", "goto_previous_end", "@block.outer", "Previous block end" },
+        { "[F", "goto_previous_end", "@function.outer", "Previous function end" },
+        { "[A", "goto_previous_end", "@parameter.inner", "Previous argument end" },
+      }
+      for _, m in ipairs(move_maps) do
+        vim.keymap.set({ "n", "x", "o" }, m[1], function()
+          move[m[2]](m[3], "textobjects")
+        end, { desc = m[4] })
+      end
+
+      -- Swap keymaps
+      local swap_maps = {
+        { ">K", "swap_next", "@block.outer", "Swap next block" },
+        { ">F", "swap_next", "@function.outer", "Swap next function" },
+        { ">A", "swap_next", "@parameter.inner", "Swap next argument" },
+        { "<K", "swap_previous", "@block.outer", "Swap previous block" },
+        { "<F", "swap_previous", "@function.outer", "Swap previous function" },
+        { "<A", "swap_previous", "@parameter.inner", "Swap previous argument" },
+      }
+      for _, s in ipairs(swap_maps) do
+        vim.keymap.set("n", s[1], function()
+          swap[s[2]](s[3])
+        end, { desc = s[4] })
+      end
+    end,
   },
-  -- enabled = function()
-  --   local filetype = vim.bo.filetype
-  --   local cwd = vim.fn.getcwd()
-  --   return cwd ~= vim.fn.expand("~/Documents/MACM316/notes") and
-  --   cwd ~= vim.fn.expand("~/Documents/college/College/2025 Spring/MACM316/notes/notes")
-  --   and filetype ~= "tex" and
-  --   cwd ~= vim.fn.expand("/Users/alex/Documents/college/College/2025 Spring/MACM316/notes/notes")
-  -- end,
-  event = { "BufReadPost", "BufNewFile" },
-  cmd = {
-    "TSBufDisable",
-    "TSBufEnable",
-    "TSBufToggle",
-    "TSDisable",
-    "TSEnable",
-    "TSToggle",
-    "TSInstall",
-    "TSInstallInfo",
-    "TSInstallSync",
-    "TSModuleInfo",
-    "TSUninstall",
-    "TSUpdate",
-    "TSUpdateSync",
-  },
-  build = ":TSUpdate",
-  init = function(plugin)
-    -- PERF: add nvim-treesitter queries to the rtp and it's custom query predicates early
-    -- This is needed because a bunch of plugins no longer `require("nvim-treesitter")`, which
-    -- no longer trigger the **nvim-treeitter** module to be loaded in time.
-    -- Luckily, the only thins that those plugins need are the custom queries, which we make available
-    -- during startup.
-    -- CODE FROM LazyVim (thanks folke!) https://github.com/LazyVim/LazyVim/commit/1e1b68d633d4bd4faa912ba5f49ab6b8601dc0c9
-    require("lazy.core.loader").add_to_rtp(plugin)
-    require "nvim-treesitter.query_predicates"
-  end,
-  opts = function()
-    return {
-      -- HACK: force install of shipped neovim parsers since TSUpdate doesn't correctly update them
-      ensure_installed = {
-        "bash",
-        "c",
-        "lua",
-        "markdown",
-        "markdown_inline",
-        "python",
-        "query",
-        "vim",
-        "vimdoc",
-        "typescript",
-        "tsx",
-        "css",
-        "html",
-        "javascript",
-        "json",
-        "rust",
-        "cpp"
-      },
-      auto_install = true,
-      highlight = {
-        enable = true,
-        disable = function(lang, bufnr)
-          return vim.b[bufnr].large_buf or lang == "tex" or lang == "latex"
-        end
-      },
-      incremental_selection = { enable = true },
-      indent = { enable = true },
-      textobjects = {
-        select = {
-          enable = true,
-          lookahead = true,
-          keymaps = {
-            ["ak"] = { query = "@block.outer", desc = "around block" },
-            ["ik"] = { query = "@block.inner", desc = "inside block" },
-            ["ac"] = { query = "@class.outer", desc = "around class" },
-            ["ic"] = { query = "@class.inner", desc = "inside class" },
-            ["a?"] = { query = "@conditional.outer", desc = "around conditional" },
-            ["i?"] = { query = "@conditional.inner", desc = "inside conditional" },
-            ["af"] = { query = "@function.outer", desc = "around function " },
-            ["if"] = { query = "@function.inner", desc = "inside function " },
-            ["al"] = { query = "@loop.outer", desc = "around loop" },
-            ["il"] = { query = "@loop.inner", desc = "inside loop" },
-            ["aa"] = { query = "@parameter.outer", desc = "around argument" },
-            ["ia"] = { query = "@parameter.inner", desc = "inside argument" },
-          },
-        },
-        move = {
-          enable = true,
-          set_jumps = true,
-          goto_next_start = {
-            ["]k"] = { query = "@block.outer", desc = "Next block start" },
-            ["]f"] = { query = "@function.outer", desc = "Next function start" },
-            ["]a"] = { query = "@parameter.inner", desc = "Next argument start" },
-          },
-          goto_next_end = {
-            ["]K"] = { query = "@block.outer", desc = "Next block end" },
-            ["]F"] = { query = "@function.outer", desc = "Next function end" },
-            ["]A"] = { query = "@parameter.inner", desc = "Next argument end" },
-          },
-          goto_previous_start = {
-            ["[k"] = { query = "@block.outer", desc = "Previous block start" },
-            ["[f"] = { query = "@function.outer", desc = "Previous function start" },
-            ["[a"] = { query = "@parameter.inner", desc = "Previous argument start" },
-          },
-          goto_previous_end = {
-            ["[K"] = { query = "@block.outer", desc = "Previous block end" },
-            ["[F"] = { query = "@function.outer", desc = "Previous function end" },
-            ["[A"] = { query = "@parameter.inner", desc = "Previous argument end" },
-          },
-        },
-        swap = {
-          enable = true,
-          swap_next = {
-            [">K"] = { query = "@block.outer", desc = "Swap next block" },
-            [">F"] = { query = "@function.outer", desc = "Swap next function" },
-            [">A"] = { query = "@parameter.inner", desc = "Swap next argument" },
-          },
-          swap_previous = {
-            ["<K"] = { query = "@block.outer", desc = "Swap previous block" },
-            ["<F"] = { query = "@function.outer", desc = "Swap previous function" },
-            ["<A"] = { query = "@parameter.inner", desc = "Swap previous argument" },
-          },
-        },
-      },
-    }
-  end,
-  config = require "plugins.configs.nvim-treesitter",
 }

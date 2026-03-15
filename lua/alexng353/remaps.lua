@@ -117,6 +117,7 @@ vim.keymap.set('v', '\'', function() SurroundSelection("\'", "\'") end, { norema
 vim.keymap.set('v', '"', function() SurroundSelection("\"", "\"") end, { noremap = true, silent = true })
 vim.keymap.set('v', '(', function() SurroundSelection("(", ")") end, { noremap = true, silent = true })
 vim.keymap.set('v', '<leader>{', function() SurroundSelection("{", "}") end, { noremap = true, silent = true })
+vim.keymap.set('v', '<leader>$', function() SurroundSelection("$", "$") end, { noremap = true, silent = true })
 vim.keymap.set('v', '<M-e>', function() SurroundSelection("{", "}") end, { noremap = true, silent = true })
 
 -- Insert lorem ipsum

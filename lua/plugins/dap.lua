@@ -22,7 +22,6 @@ return {
         ensure_installed = {
           "python",   -- Python debugging
           "cppdbg",   -- C/C++ debugging
-          "node2",    -- JavaScript debugging
           "go",       -- Go debugging
           "codelldb", -- Rust debugging
           "cpptools", -- C++ debugging

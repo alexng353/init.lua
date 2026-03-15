@@ -1,3 +1,12 @@
+-- Wrapper to fix deprecation warning for make_position_params
+vim.lsp.util.make_position_params = (function(original)
+  return function(window, offset_encoding)
+    local client = vim.lsp.get_clients({ bufnr = vim.api.nvim_win_get_buf(window or 0) })[1]
+    offset_encoding = offset_encoding or (client and client.offset_encoding) or "utf-16"
+    return original(window, offset_encoding)
+  end
+end)(vim.lsp.util.make_position_params)
+
 local lsp_zero = require('lsp-zero')
 local telescope = require('telescope.builtin')
 
@@ -41,15 +50,13 @@ require('mason-lspconfig').setup({
         on_attach = function(client)
           client.server_capabilities.documentFormattingProvider = false
           client.server_capabilities.documentRangeFormattingProvider = false
+          client.capabilities.documentFormattingProvider = false
+          client.capabilities.documentRangeFormattingProvider = false
         end
-        -- settings = {
-        --   typescript = {
-        --     tsserver = {
-        --       maxTsServerMemory = 8192
-        --     }
-        --   }
-        -- }
       })
+    end,
+    prettier = function()
+      require('lspconfig').prettierd.setup()
     end,
     lua_ls = function()
       require('lspconfig').lua_ls.setup({
@@ -75,11 +82,25 @@ require('mason-lspconfig').setup({
 
       }
     end,
+    dockerls = function()
+      require('lspconfig').dockerls.setup({
+        on_attach = function(client, bufnr)
+          local filename = vim.api.nvim_buf_get_name(bufnr)
+          if filename:match("%.dockerignore$") then
+            vim.lsp.buf_detach_client(bufnr, client.id)
+            return
+          end
+        end,
+      })
+    end,
   }
-
-  -- matlab_ls = function()
-  -- end
 })
+
+-- Use local tailwindcss-language-server build (with class grouping)
+vim.lsp.config('tailwindcss', {
+  cmd = { 'node', '/home/alex/code/opensource/tailwindcss-intellisense/packages/tailwindcss-language-server/bin/tailwindcss-language-server', '--stdio' },
+})
+vim.lsp.enable('tailwindcss')
 
 local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()

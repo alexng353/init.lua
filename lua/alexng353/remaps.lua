@@ -73,7 +73,7 @@ vim.keymap.set('n', "<leader>bC", function() vim.api.nvim_buf_delete(0, { force 
 -- Tab
 vim.keymap.set('n', "[t", ":tabprevious<CR>", { noremap = true, desc = "Go to previous tab" })
 vim.keymap.set('n', "]t", ":tabnext<CR>", { noremap = true, desc = "Go to next tab" })
-vim.keymap.set('n', "<leader>tc", ":tabclose<CR>", { noremap = true, desc = "Close tab" })
+vim.keymap.set('n', "<leader>tq", ":tabclose<CR>", { noremap = true, desc = "Close tab" })
 vim.keymap.set('n', "<leader>tC", ":tabonly<CR>", { noremap = true, desc = "Close all tabs except current" })
 vim.keymap.set('n', "<leader>tn", ":tabnew<CR>", { noremap = true, desc = "New tab" })
 
@@ -226,6 +226,7 @@ vim.api.nvim_set_keymap('v', '', ':GitBlameCopyFileURL<CR>',
 
 local Terminal = require('toggleterm.terminal').Terminal
 local default_shell = Terminal:new({ cmd = 'zsh', hidden = true })
+local claude_term = Terminal:new({ cmd = 'claude', direction = 'vertical', hidden = true })
 vim.keymap.set(
   'n',
   '<leader>to',
@@ -241,6 +242,15 @@ vim.keymap.set(
     default_shell:toggle()
   end,
   { noremap = true, silent = true, desc = "Toggle terminal" }
+)
+vim.keymap.set(
+  'n',
+  '<leader>tc',
+  function()
+    claude_term:toggle()
+    vim.cmd('wincmd =')
+  end,
+  { noremap = true, silent = true, desc = "Toggle Claude terminal" }
 )
 
 vim.keymap.set("n", "<leader>zz", function()

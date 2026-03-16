@@ -38,6 +38,7 @@ vim.keymap.set("i", "<C-c>", "<Esc>")
 -- Terminal
 vim.keymap.set("t", "<Esc><C-N>", "<C-\\><C-n>", { noremap = true, silent = true })
 vim.keymap.set("t", "<C-space>", "<C-\\><C-n>", { noremap = true, silent = true })
+vim.keymap.set("t", "<S-Enter>", "\x1b[13;2u", { noremap = true, silent = true })
 
 -- Select a whole block and indent it
 vim.keymap.set('v', '<Tab>', '>gv', { noremap = true })
@@ -75,7 +76,7 @@ vim.keymap.set('n', "[t", ":tabprevious<CR>", { noremap = true, desc = "Go to pr
 vim.keymap.set('n', "]t", ":tabnext<CR>", { noremap = true, desc = "Go to next tab" })
 vim.keymap.set('n', "<leader>tq", ":tabclose<CR>", { noremap = true, desc = "Close tab" })
 vim.keymap.set('n', "<leader>tC", ":tabonly<CR>", { noremap = true, desc = "Close all tabs except current" })
-vim.keymap.set('n', "<leader>tn", ":tabnew<CR>", { noremap = true, desc = "New tab" })
+vim.keymap.set('n', "<leader>tn", "<cmd>tabnew<CR>", { noremap = true, desc = "New tab" })
 
 -- Highlight yanked text
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })

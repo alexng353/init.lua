@@ -1,6 +1,10 @@
 return {
   "obsidian-nvim/obsidian.nvim",
   version = "*", -- use latest release, remove to use latest commit
+  event = {
+    "BufReadPre " .. vim.fn.expand("~") .. "/Documents/Obsidian Vault/**.md",
+    "BufNewFile " .. vim.fn.expand("~") .. "/Documents/Obsidian Vault/**.md",
+  },
   ---@module 'obsidian'
   ---@type obsidian.config
   opts = {

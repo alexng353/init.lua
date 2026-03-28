@@ -39,3 +39,10 @@ vim.opt.shell = "/bin/zsh"
 vim.o.wrap = false
 
 vim.opt.termguicolors = true
+
+vim.api.nvim_create_autocmd("BufEnter", {
+  pattern = vim.fn.expand("~") .. "/Documents/Obsidian Vault/**",
+  callback = function()
+    vim.opt_local.conceallevel = 2
+  end,
+})

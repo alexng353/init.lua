@@ -17,6 +17,7 @@ return {
     init = function(plugin)
       -- PERF: add nvim-treesitter queries to the rtp early
       require("lazy.core.loader").add_to_rtp(plugin)
+      require("lazy.core.loader").add_to_rtp({ dir = plugin.dir .. "/runtime" })
     end,
     config = function()
       require("nvim-treesitter").setup {
@@ -26,6 +27,14 @@ return {
           "json", "rust", "cpp",
         },
       }
+
+      vim.api.nvim_create_autocmd("FileType", {
+        callback = function(args)
+          if pcall(vim.treesitter.start, args.buf) then
+            vim.bo[args.buf].syntax = "off"
+          end
+        end,
+      })
     end,
   },
   {

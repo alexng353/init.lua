@@ -24,7 +24,7 @@ return {
         ensure_installed = {
           "bash", "c", "lua", "markdown", "markdown_inline", "python", "query",
           "vim", "vimdoc", "typescript", "tsx", "css", "html", "javascript",
-          "json", "rust", "cpp",
+          "json", "rust", "cpp", "sql",
         },
       }
 

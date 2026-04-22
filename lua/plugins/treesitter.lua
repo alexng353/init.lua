@@ -7,11 +7,10 @@ return {
     event = { "BufReadPost", "BufNewFile" },
     cmd = {
       "TSInstall",
-      "TSInstallInfo",
-      "TSInstallSync",
+      "TSInstallFromGrammar",
       "TSUninstall",
       "TSUpdate",
-      "TSUpdateSync",
+      "TSLog",
     },
     build = ":TSUpdate",
     init = function(plugin)
@@ -20,13 +19,22 @@ return {
       require("lazy.core.loader").add_to_rtp({ dir = plugin.dir .. "/runtime" })
     end,
     config = function()
-      require("nvim-treesitter").setup {
-        ensure_installed = {
-          "bash", "c", "lua", "markdown", "markdown_inline", "python", "query",
-          "vim", "vimdoc", "typescript", "tsx", "css", "html", "javascript",
-          "json", "rust", "cpp", "sql",
-        },
+      local ts = require("nvim-treesitter")
+      ts.setup {}
+
+      local parsers = {
+        "bash", "c", "lua", "markdown", "markdown_inline", "python", "query",
+        "vim", "vimdoc", "typescript", "tsx", "css", "html", "javascript",
+        "json", "rust", "cpp", "sql",
       }
+
+      local installed = ts.get_installed("parsers")
+      local to_install = vim.tbl_filter(function(p)
+        return not vim.list_contains(installed, p)
+      end, parsers)
+      if #to_install > 0 then
+        ts.install(to_install)
+      end
 
       vim.api.nvim_create_autocmd("FileType", {
         callback = function(args)

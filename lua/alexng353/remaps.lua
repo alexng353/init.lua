@@ -5,7 +5,7 @@ vim.keymap.set("n", "<Leader>w", ":w<Cr>:echo 'wrote to file'<Cr>", { noremap = 
 vim.keymap.set("n", "<Leader>qq", function()
   -- Save all writable and modified buffers
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-    if vim.api.nvim_buf_is_loaded(buf) and vim.api.nvim_buf_get_option(buf, "modifiable") and vim.api.nvim_buf_get_option(buf, "buftype") == "" then
+    if vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].modifiable and vim.bo[buf].buftype == "" then
       vim.api.nvim_command("silent! write")
     end
   end
@@ -15,7 +15,7 @@ end, { noremap = true, silent = true })
 vim.keymap.set("n", "<Leader>qu", function()
   -- Save all writable and modified buffers
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-    if vim.api.nvim_buf_is_loaded(buf) and vim.api.nvim_buf_get_option(buf, "modifiable") and vim.api.nvim_buf_get_option(buf, "buftype") == "" then
+    if vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].modifiable and vim.bo[buf].buftype == "" then
       vim.api.nvim_command("silent! write")
     end
   end
@@ -82,7 +82,7 @@ vim.keymap.set('n', "<leader>tn", "<cmd>tabnew<CR>", { noremap = true, desc = "N
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
 vim.api.nvim_create_autocmd('TextYankPost', {
   callback = function()
-    vim.highlight.on_yank({
+    vim.hl.on_yank({
       timeout = 50
     })
   end,
@@ -264,7 +264,7 @@ vim.api.nvim_create_autocmd("VimLeavePre", {
   callback = function()
     for _, buf in ipairs(vim.api.nvim_list_bufs()) do
       if vim.api.nvim_buf_is_loaded(buf)
-          and vim.api.nvim_buf_get_option(buf, "filetype") == "zenmode-bg"
+          and vim.bo[buf].filetype == "zenmode-bg"
       then
         require("zen-mode").toggle()
         break

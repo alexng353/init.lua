@@ -12,6 +12,7 @@ vim.wo.number = true
 vim.wo.relativenumber = true
 
 vim.cmd('filetype plugin indent on')
+vim.filetype.add({ extension = { rts = "typescript" } })
 vim.o.expandtab = true
 vim.o.tabstop = 2
 vim.o.softtabstop = 2

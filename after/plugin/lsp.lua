@@ -41,7 +41,8 @@ require('mason').setup({})
 require('mason-lspconfig').setup({
   ensure_installed = {
     'ts_ls',
-    'rust_analyzer'
+    'rust_analyzer',
+    'mdx_analyzer',
   },
   handlers = {
     lsp_zero.default_setup,

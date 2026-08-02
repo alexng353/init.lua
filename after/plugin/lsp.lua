@@ -45,6 +45,7 @@ vim.lsp.enable({
   'dockerls',
   'tailwindcss',
   'mdx_analyzer',
+  'rts_lsp',
 })
 
 local cmp = require('cmp')

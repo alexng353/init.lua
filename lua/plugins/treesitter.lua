@@ -1,9 +1,6 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
-    dependencies = {
-      "JoosepAlviste/nvim-ts-context-commentstring",
-    },
     event = { "BufReadPost", "BufNewFile" },
     cmd = {
       "TSInstall",

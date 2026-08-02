@@ -1,2 +1,5 @@
-vim.keymap.set('n', '<leader>/', function() require("Comment.api").toggle.linewise.count(vim.v.count > 0 and vim.v.count or 1) end, { noremap = true, silent = true })
-vim.keymap.set('v', '<leader>/', '<esc><cmd>lua require("Comment.api").toggle.linewise(vim.fn.visualmode())<cr>', { noremap = true, silent = true })
+-- Native Neovim commenting (0.10+). Uses `commentstring`, so it works in every
+-- filetype regardless of whether a treesitter parser is installed.
+-- `gcc` honors a count (e.g. 3<leader>/ comments 3 lines); `gc` is the operator.
+vim.keymap.set('n', '<leader>/', 'gcc', { remap = true, silent = true, desc = 'Toggle comment line' })
+vim.keymap.set('x', '<leader>/', 'gc', { remap = true, silent = true, desc = 'Toggle comment selection' })

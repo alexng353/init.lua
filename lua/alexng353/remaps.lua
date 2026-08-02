@@ -186,8 +186,6 @@ vim.api.nvim_create_autocmd("TextChangedI", {
   end,
 })
 
-vim.api.nvim_set_keymap('n', 'm', 's', { noremap = true, silent = true })
-
 function convert_to_bmatrix()
   -- Get the visual selection
   local start_row, start_col = vim.fn.getpos("'<")[2], vim.fn.getpos("'<")[3]
